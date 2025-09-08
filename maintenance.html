@@ -22,7 +22,7 @@
  <h2>Технічне обслуговування</h2>
     <h3>Технічний огляд обладнання</h3>
       <form id="inspectionForm">
-    <p>Замір тиску газо по кожній задіяній лінії:</p>
+    <p>Замір тиску газу по кожній задіяній лінії:</p>
     <fieldset>
       <legend>Лінія 1</legend>
       <label>
@@ -36,6 +36,15 @@
       <label>Замір тиску газу на виході:
         <input type="number" step="0.01" id="line1_out" > МПа
       </label>
+
+            <label>Замір тиску газу на вході у фільтр:
+        <input type="number" step="0.01" id="line1_filter_in" > МПа
+      </label><br><br>
+
+      <label>Замір тиску газу на виході з фільтра:
+        <input type="number" step="0.01" id="line1_filter_out" > МПа
+      </label>
+    </fieldset>
     </fieldset>
 
     <fieldset>
@@ -51,41 +60,19 @@
       <label>Замір тиску газу на виході:
         <input type="number" step="0.01" id="line2_out" > МПа
       </label>
+
+     <label>Замір тиску газу на вході у фільтр:
+        <input type="number" step="0.01" id="line2_filter_in" > МПа
+      </label><br><br>
+
+     <label>Замір тиску газу на виході з фільтра:
+        <input type="number" step="0.01" id="line2_filter_out" > МПа
+      </label>
     </fieldset>
 
   
 
 <h3>Технічне обслуговування</h3>
-
-    <fieldset>
-      <legend>Лінія 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
-
-      <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line1_filter_in" > МПа
-      </label><br><br>
-
-      <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line1_filter_out" > МПа
-      </label>
-    </fieldset>
-        
-    <fieldset>
-      <legend>Лінія 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
-
-      <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line2_filter_in" > МПа
-      </label><br><br>
-
-      <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line2_filter_out" > МПа
-      </label>
-    </fieldset>
 
   <h4>Під час проведення обслуговування було виконано:</h4>
     <fieldset>     
