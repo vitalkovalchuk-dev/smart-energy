@@ -29,7 +29,7 @@
   </nav>
 
   <!-- Бургер -->
-  <div class="burger">☰</div>
+  <button class="burger" aria-label="Відкрити меню">☰</button>
 
   <!-- Мобільне меню -->
   <div id="mobileMenu" class="mobile-menu">
@@ -44,4 +44,29 @@
       <li><a href="#" data-submenu="documentation">Технічна документація</a></li>
       <li><a href="#" data-submenu="works">Виконання робіт</a></li>
       <li><a href="instructions.html">Інструкції та навчальні відео</a></li>
-    </
+    </ul>
+
+    <!-- Підменю: документація -->
+    <ul data-level="documentation" data-parent="root" style="display:none;">
+      <li><a href="passport.html">Протокол ПРГ</a></li>
+      <li><a href="project.html">Робочий проект</a></li>
+      <li><a href="docs.html">Виконавчо-технічна документація</a></li>
+      <li><a href="scheme.html">Принципова схема ПРГ</a></li>
+      <li><a href="mode.html">Режимна картка роботи обладнання</a></li>
+    </ul>
+
+    <!-- Підменю: роботи -->
+    <ul data-level="works" data-parent="root" style="display:none;">
+      <li><a href="list_prg.html">Графіки проведення робіт</a></li>
+      <li><a href="inspection.html">Технічний огляд</a></li>
+      <li><a href="adjustment.html">Регулювання</a></li>
+      <li><a href="maintenance.html">Технічне обслуговування</a></li>
+      <li><a href="repair.html">Плановий ремонт</a></li>
+      <li><a href="devices.html">Обслуговування КВП</a></li>
+      <li><a href="photo.html">Фотофіксація</a></li>
+    </ul>
+  </div>
+</header>
+
+<!-- Підключення скрипта -->
+<script src="js/js_script.js"></script>
