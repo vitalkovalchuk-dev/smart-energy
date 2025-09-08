@@ -5,21 +5,43 @@ document.addEventListener("DOMContentLoaded", function () {
   const backBtn = document.querySelector(".menu-back");
   const closeBtn = document.querySelector(".menu-close");
   const menuTitle = document.querySelector(".menu-title");
+  const overlay = document.getElementById("menuOverlay");
 
   let currentMenu = mobileMenu.querySelector("ul[data-level='root']");
 
-  // Відкрити бургер-меню
+  function openMenu() {
+    mobileMenu.classList.add("active");
+    overlay.classList.add("active");
+    showMenu("root", "Меню");
+  }
+
+  function closeMenu() {
+    mobileMenu.classList.remove("active");
+    overlay.classList.remove("active");
+  }
+
+  // Відкрити/закрити бургер-меню (toggle)
   if (burger) {
     burger.addEventListener("click", () => {
-      mobileMenu.classList.add("active");
-      showMenu("root", "Меню");
+      if (mobileMenu.classList.contains("active")) {
+        closeMenu();
+      } else {
+        openMenu();
+      }
     });
   }
 
-  // Закрити меню
+  // Закрити меню кнопкою ✖
   if (closeBtn) {
     closeBtn.addEventListener("click", () => {
-      mobileMenu.classList.remove("active");
+      closeMenu();
+    });
+  }
+
+  // Закрити меню кліком по overlay
+  if (overlay) {
+    overlay.addEventListener("click", () => {
+      closeMenu();
     });
   }
 
@@ -60,7 +82,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-  // Функція задіювання чекбоксів
+// ====== Функція задіювання чекбоксів ======
 document.addEventListener("DOMContentLoaded", () => {
   const toggles = document.querySelectorAll('.line-toggle');
 
@@ -89,6 +111,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// ====== Валідація та обробка форми ======
 document.getElementById("fullForm").addEventListener("submit", function (e) {
   e.preventDefault(); // зупиняємо стандартну відправку
 
@@ -121,15 +144,5 @@ document.getElementById("fullForm").addEventListener("submit", function (e) {
   
   console.log("📋 Дані для відправки:", formData);
 
-  // Якщо потрібно надіслати на сервер:
-  // fetch('/api/save', {
-  //   method: 'POST',
-  //   headers: { 'Content-Type': 'application/json' },
-  //   body: JSON.stringify(formData)
-  // }).then(res => res.json()).then(data => {
-  //   alert('Дані збережено!');
-  // });
-
   alert("✅ Дані зібрано. Перевір консоль.");
 });
-
