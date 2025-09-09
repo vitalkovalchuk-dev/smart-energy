@@ -8,8 +8,9 @@
     table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
     th { background: #f0f0f0; cursor: pointer; }
-    pre { margin: 0; font-family: monospace; }
+    pre { margin: 0; font-family: monospace; white-space: pre-wrap; }
     .filters { margin-bottom: 10px; }
+    .btn-back { margin-top: 20px; }
   </style>
 </head>
 <body>
@@ -19,11 +20,11 @@
     <label>Сторінка:
       <select id="pageFilter">
         <option value="all">Всі</option>
-        <option value="inspection">Технічний огляд</option>
-        <option value="maintenance">Технічне обслуговування</option>
-        <option value="repair">Плановий ремонт</option>
-        <option value="adjustment">Регулювання</option>
-        <option value="vk">Відомчий контроль</option>
+        <option value="PO.json">Технічний огляд</option>
+        <option value="TO.json">Технічне обслуговування</option>
+        <option value="PR.json">Плановий ремонт</option>
+        <option value="ADJ.json">Регулювання</option>
+        <option value="VK.json">Відомчий контроль</option>
       </select>
     </label>
 
@@ -45,46 +46,72 @@
         <th>Дані</th>
       </tr>
     </thead>
-    <tbody id="logBody">
-      <!-- записи будуть вставлені сервером -->
-
-      <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
-
-    </tbody>
+    <tbody id="logBody"></tbody>
   </table>
 
+  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+
   <script>
-    const logTable = document.getElementById("logTable");
     const logBody = document.getElementById("logBody");
+    let journalData = [];
+
+    async function loadJournal() {
+      try {
+        const res = await fetch("/data/journal.json?_=" + Date.now()); // уникаємо кешу
+        if (!res.ok) throw new Error("Не вдалося завантажити journal.json");
+        journalData = await res.json();
+        renderTable(journalData);
+      } catch (err) {
+        console.error(err);
+        logBody.innerHTML = `<tr><td colspan="3">⚠️ Не вдалося завантажити журнал</td></tr>`;
+      }
+    }
+
+    function renderTable(data) {
+      logBody.innerHTML = "";
+      if (data.length === 0) {
+        logBody.innerHTML = `<tr><td colspan="3">Журнал порожній</td></tr>`;
+        return;
+      }
+
+      for (const row of data) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${new Date(row.time).toLocaleString("uk-UA")}</td>
+          <td>${row.source}</td>
+          <td><pre>${row.summary}</pre></td>
+        `;
+        logBody.appendChild(tr);
+      }
+    }
 
     function applyFilters() {
       const pageValue = document.getElementById("pageFilter").value;
       const dateFrom = document.getElementById("dateFrom").value;
       const dateTo = document.getElementById("dateTo").value;
 
-      for (const row of logBody.rows) {
-        const rowPage = row.cells[1].textContent;
-        const rowTime = new Date(row.cells[0].textContent);
-
+      const filtered = journalData.filter(row => {
+        const rowTime = new Date(row.time);
         let visible = true;
 
-        // Фільтр по сторінці
-        if (pageValue !== "all" && rowPage !== pageValue) visible = false;
+        if (pageValue !== "all" && row.source !== pageValue) visible = false;
+        if (dateFrom && rowTime < new Date(dateFrom)) visible = false;
+        if (dateTo && rowTime > new Date(dateTo + "T23:59:59")) visible = false;
 
-        // Фільтр по даті
-        if (dateFrom) visible = visible && (rowTime >= new Date(dateFrom));
-        if (dateTo) visible = visible && (rowTime <= new Date(dateTo + "T23:59:59"));
+        return visible;
+      });
 
-        row.style.display = visible ? "" : "none";
-      }
+      renderTable(filtered);
     }
 
     function resetFilters() {
       document.getElementById("pageFilter").value = "all";
       document.getElementById("dateFrom").value = "";
       document.getElementById("dateTo").value = "";
-      applyFilters();
+      renderTable(journalData);
     }
+
+    loadJournal();
   </script>
 </body>
 </html>
