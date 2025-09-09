@@ -5,16 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Сервіс</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="script.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("header.html")
-        .then(response => response.text())
-        .then(data => {
-          document.body.insertAdjacentHTML("afterbegin", data);
-        });
-    });
-  </script>
+<script src="js/script.js" defer></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    fetch("header.html")
+      .then(response => response.text())
+      .then(data => {
+        document.body.insertAdjacentHTML("afterbegin", data);
+        initBurgerMenu(); // запускаємо бургер-меню після вставки
+      })
+      .catch(err => console.error("Помилка завантаження хедера:", err));
+  });
+</script>
 </head>
 <body>
   <main>
