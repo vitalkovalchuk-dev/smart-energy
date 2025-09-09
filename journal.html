@@ -14,8 +14,7 @@
     <form id="journalForm">
       <fieldset>
         <legend>Фільтрувати записи</legend>
-        <label>Дата початку: <input type="date" id="journal_start"></label><br>
-        <label>Дата кінця: <input type="date" id="journal_end"></label><br>
+
         <label>Тип процедури:
           <select id="journal_type">
             <option value="PO">Технічний огляд</option>
@@ -25,14 +24,6 @@
             <option value="VK">Відомчий контроль</option>
           </select>
         </label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Дані запису</legend>
-        <label>Назва поля: <input type="text" id="journal_field"></label><br>
-        <label>Значення: <input type="text" id="journal_value"></label><br>
-        <label>Одиниця виміру: <input type="text" id="journal_unit"></label><br>
-        <label><input type="checkbox" id="journal_active"> Активний</label>
       </fieldset>
 
       <button type="submit">Передати дані</button>
