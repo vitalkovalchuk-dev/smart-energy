@@ -5,18 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Технічний огляд</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("header.html")
-        .then(response => response.text())
-        .then(data => {
-          document.body.insertAdjacentHTML("afterbegin", data);
-        });
-    });
-  </script>
+  <script src="js/js_script.js" defer></script>
 </head>
 <body>
+  <div id="header-placeholder"></div>
+
   <main>
     <h2>Технічний огляд обладнання</h2>
 
@@ -25,22 +18,16 @@
 
       <fieldset>
         <legend>Лінія 1</legend>
-        <label>
-          <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-        </label><br><br>
-
+        <label><input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ</label><br><br>
         <label>Замір тиску газу на вході:
           <input type="number" step="0.01" id="line1_in" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на вході у фільтр:
           <input type="number" step="0.01" id="line1_filter_in" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на виході з фільтра:
           <input type="number" step="0.01" id="line1_filter_out" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на виході:
           <input type="number" step="1" id="line1_out" disabled> мм.вод.ст
         </label><br><br>
@@ -48,43 +35,31 @@
 
       <fieldset>
         <legend>Лінія 2</legend>
-        <label>
-          <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-        </label><br><br>
-
+        <label><input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ</label><br><br>
         <label>Замір тиску газу на вході:
           <input type="number" step="0.01" id="line2_in" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на вході у фільтр:
           <input type="number" step="0.01" id="line2_filter_in" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на виході з фільтра:
           <input type="number" step="0.01" id="line2_filter_out" disabled> МПа
         </label><br><br>
-
         <label>Замір тиску газу на виході:
           <input type="number" step="1" id="line2_out" disabled> мм.вод.ст
         </label><br><br>
       </fieldset>
 
       <h4>Усунуто витоків газу</h4>
-
       <fieldset>
         <legend>Лінія 1</legend>
-        <label>
-          <input type="checkbox" id="line1_leak_status"> ВКЛ/ВИКЛ
-        </label><br><br>
-
+        <label><input type="checkbox" id="line1_leak_status"> ВКЛ/ВИКЛ</label><br><br>
         <label>на газопроводі високого тиску:
           <input type="number" step="1" id="line1_leak3" disabled> шт
         </label><br><br>
-
         <label>на газопроводі середнього тиску:
           <input type="number" step="1" id="line1_leak2" disabled> шт
         </label><br><br>
-
         <label>на газопроводі низького тиску:
           <input type="number" step="1" id="line1_leak1" disabled> шт
         </label>
@@ -92,18 +67,13 @@
 
       <fieldset>
         <legend>Лінія 2</legend>
-        <label>
-          <input type="checkbox" id="line2_leak_status"> ВКЛ/ВИКЛ
-        </label><br><br>
-
+        <label><input type="checkbox" id="line2_leak_status"> ВКЛ/ВИКЛ</label><br><br>
         <label>на газопроводі високого тиску:
           <input type="number" step="1" id="line2_leak3" disabled> шт
         </label><br><br>
-
         <label>на газопроводі середнього тиску:
           <input type="number" step="1" id="line2_leak2" disabled> шт
         </label><br><br>
-
         <label>на газопроводі низького тиску:
           <input type="number" step="1" id="line2_leak1" disabled> шт
         </label>
@@ -116,30 +86,26 @@
   </main>
 
   <script>
+    fetch("header.html")
+      .then(r => r.text())
+      .then(html => document.getElementById("header-placeholder").innerHTML = html);
+
     document.addEventListener("DOMContentLoaded", () => {
-      // Чекбокси керують активністю полів
-      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(checkbox => {
-        checkbox.addEventListener("change", () => {
-          const fieldset = checkbox.closest("fieldset");
-          if (!fieldset) return;
-          const inputs = fieldset.querySelectorAll("input[type=number]");
-          inputs.forEach(inp => inp.disabled = !checkbox.checked);
+      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+        cb.addEventListener("change", () => {
+          const fs = cb.closest("fieldset");
+          if (!fs) return;
+          fs.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
         });
-        checkbox.dispatchEvent(new Event("change"));
+        cb.dispatchEvent(new Event("change"));
       });
 
-      // Відправка на сервер
       const form = document.getElementById("inspectionForm");
-      form.addEventListener("submit", async (e) => {
+      form.addEventListener("submit", async e => {
         e.preventDefault();
-
         const data = {};
         form.querySelectorAll("input").forEach(inp => {
-          if (inp.type === "checkbox") {
-            data[inp.id] = inp.checked;
-          } else {
-            data[inp.id] = inp.value;
-          }
+          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
         });
 
         try {
@@ -152,19 +118,15 @@
               data
             })
           });
-
           const result = await res.json();
           if (result.success) {
             alert("Дані успішно збережено!");
             form.reset();
-            // після reset знову відключаємо поля
-            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
-              cb.dispatchEvent(new Event("change"));
-            });
+            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => cb.dispatchEvent(new Event("change")));
           } else {
             alert("Помилка: " + result.error);
           }
-        } catch (err) {
+        } catch(err) {
           alert("Не вдалося надіслати дані!");
           console.error(err);
         }
