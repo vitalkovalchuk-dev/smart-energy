@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Електронний журнал</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { color: #1d4ed8; }
+    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f0f0f0; }
+    .filter { margin: 10px 0; }
+    .filter label { margin-right: 15px; }
+    select, input { padding: 5px; }
+    button { padding: 6px 12px; background: #1d4ed8; color: white; border: none; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #2563eb; }
+  </style>
+</head>
+<body>
+  <h2>Електронний журнал</h2>
+
+  <div class="filter">
+    <label>Фільтр по ролі:
+      <select id="roleFilter">
+        <option value="">Усі</option>
+        <option value="Admin">Admin</option>
+        <option value="Team">Team</option>
+        <option value="Kontrol">Kontrol</option>
+      </select>
+    </label>
+    <label>Фільтр по користувачу:
+      <input type="text" id="userFilter" placeholder="ПІБ або логін">
+    </label>
+    <label>Фільтр по сторінці:
+      <select id="pageFilter">
+        <option value="">Усі</option>
+        <option value="TO">TO</option>
+        <option value="PO">PO</option>
+        <option value="ADJ">ADJ</option>
+        <option value="PR">PR</option>
+        <option value="VK">VK</option>
+      </select>
+    </label>
+    <button onclick="renderTable()">Фільтрувати</button>
+  </div>
+
+  <table id="logTable">
+    <thead>
+      <tr>
+        <th>Час</th>
+        <th>Ім’я</th>
+        <th>Роль</th>
+        <th>Сторінка</th>
+        <th>Дія</th>
+        <th>Деталі</th>
+        <th>Геолокація</th>
+        <th>Відстань (м)</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    async function loadLogs() {
+      const files = ["TO.json", "PO.json", "ADJ.json", "PR.json", "VK.json"];
+      let allLogs = [];
+
+      for (const file of files) {
+        try {
+          const res = await fetch(`http://localhost:3000/data/${file}`);
+          if (res.ok) {
+            const data = await res.json();
+            allLogs = allLogs.concat(data.map(r => ({...r, page: file.replace(".json", "")})));
+          }
+        } catch (err) {
+          console.warn(`Не вдалося завантажити ${file}`);
+        }
+      }
+      return allLogs;
+    }
+
+    async function renderTable() {
+      const logs = await loadLogs();
+      const roleFilter = document.getElementById("roleFilter").value;
+      const userFilter = document.getElementById("userFilter").value.toLowerCase();
+      const pageFilter = document.getElementById("pageFilter").value;
+
+      const tbody = document.querySelector("#logTable tbody");
+      tbody.innerHTML = "";
+
+      logs
+        .filter(log => (!roleFilter || log.role === roleFilter))
+        .filter(log => (!userFilter || log.user.toLowerCase().includes(userFilter)))
+        .filter(log => (!pageFilter || log.page === pageFilter))
+        .forEach(log => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${log.time || ""}</td>
+            <td>${log.user || ""}</td>
+            <td>${log.role || ""}</td>
+            <td>${log.page || ""}</td>
+            <td>${log.action || ""}</td>
+            <td>${log.details || ""}</td>
+            <td>${log.geo ? (log.geo.lat.toFixed(4) + ", " + log.geo.lng.toFixed(4)) : ""}</td>
+            <td>${log.distance || ""}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>
