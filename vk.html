@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Відомчий контроль</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js" defer></script>
+  <script src="js/js_script.js" defer></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       fetch("header.html")
@@ -18,60 +18,81 @@
 </head>
 <body>
   <main>
-    <h1>Відомчий контроль</h1>
+    <h2>Відомчий контроль</h2>
 
-    <section class="remarks">
-      <h2>Виявлені недоліки / зауваження</h2>
-      <textarea id="remarksInput" rows="5" placeholder="Введіть зауваження..."></textarea>
-      <br>
-      <button onclick="saveRemark()">Зберегти</button>
-    </section>
+    <form id="vkForm">
+      <fieldset>
+        <legend>Контроль обладнання</legend>
+        <label><input type="checkbox" id="vk_line1_status"> Лінія 1 - ВКЛ/ВИКЛ</label><br>
+        <label><input type="checkbox" id="vk_line2_status"> Лінія 2 - ВКЛ/ВИКЛ</label><br>
+      </fieldset>
 
-    <section class="journal-access">
-  
-      <p>Для перегляду та фільтрації подій скористайтесь журналом нижче:</p>
-      <iframe src="journal.html" width="100%" height="500" style="border:1px solid #ccc; border-radius:8px;"></iframe>
-    </section>
+      <fieldset>
+        <legend>Результати вимірювань</legend>
+        <label>Лінія 1: <input type="number" id="vk_line1_val" step="0.01" disabled> МПа</label><br>
+        <label>Лінія 2: <input type="number" id="vk_line2_val" step="0.01" disabled> МПа</label><br>
+      </fieldset>
+
+      <fieldset>
+        <legend>Додаткові перевірки</legend>
+        <label><input type="checkbox" id="vk_leak1"> Витік високого тиску</label><br>
+        <label><input type="checkbox" id="vk_leak2"> Витік середнього тиску</label><br>
+        <label><input type="checkbox" id="vk_leak3"> Витік низького тиску</label><br>
+      </fieldset>
+
+      <button type="submit">Передати дані</button>
+    </form>
+
+    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
   </main>
 
-  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
-
   <script>
-    async function saveRemark() {
-      const text = document.getElementById("remarksInput").value.trim();
-      if (!text) {
-        alert("Введіть текст зауваження!");
-        return;
-      }
+    document.addEventListener("DOMContentLoaded", () => {
+      // Керування активністю числових полів через чекбокси
+      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+        cb.addEventListener("change", () => {
+          const fs = cb.closest("fieldset");
+          if (!fs) return;
+          fs.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
+        });
+        cb.dispatchEvent(new Event("change"));
+      });
 
-      const remark = {
-        time: new Date().toISOString(),
-        user: "currentUser", // тут підставиш авторизованого користувача
-        role: "Kontrol",     // роль, яка залишає зауваження
-        action: "remark",
-        details: text,
-        file: "VK.json"      // важливо! саме у цей файл буде збережено
-      };
-
-      try {
-        const res = await fetch("/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(remark)
+      // Відправка даних у VK.json
+      const form = document.getElementById("vkForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {};
+        form.querySelectorAll("input").forEach(inp => {
+          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
         });
 
-        const result = await res.json();
-        if (result.success) {
-          alert("Зауваження збережено!");
-          document.getElementById("remarksInput").value = "";
-        } else {
-          alert("Помилка: " + result.error);
+        try {
+          const res = await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              file: "VK.json",
+              time: new Date().toISOString(),
+              data
+            })
+          });
+          const result = await res.json();
+          if (result.success) {
+            alert("Дані успішно збережено!");
+            form.reset();
+            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+              cb.dispatchEvent(new Event("change"));
+            });
+          } else {
+            alert("Помилка: " + result.error);
+          }
+        } catch (err) {
+          alert("Не вдалося надіслати дані!");
+          console.error(err);
         }
-      } catch (err) {
-        console.error("Помилка запиту:", err);
-        alert("Не вдалося зберегти зауваження!");
-      }
-    }
+      });
+    });
   </script>
 </body>
 </html>
