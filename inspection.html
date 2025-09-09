@@ -24,59 +24,54 @@
           <form id="inspectionForm">
     <p>Замір тиску газу по кожній задіяній лінії:</p>
     <fieldset>
-      <legend>Лінія 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+  <legend>Лінія 1</legend>
+  <label>
+    <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
+  </label><br><br>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line1_in" > МПа
-      </label><br><br>
+  <label>Замір тиску газу на вході:
+    <input type="number" step="0.01" id="line1_in" disabled> МПа
+  </label><br><br>
 
-      <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line1_filter_in" > МПа
-      </label><br><br>
+  <label>Замір тиску газу на вході у фільтр:
+    <input type="number" step="0.01" id="line1_filter_in" disabled> МПа
+  </label><br><br>
 
-      <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line1_filter_out" > МПа
-      </label><br><br>
-  
-      <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line1_out" > мм.вод.ст
-      </label><br><br>
-    </fieldset>
+  <label>Замір тиску газу на виході з фільтра:
+    <input type="number" step="0.01" id="line1_filter_out" disabled> МПа
+  </label><br><br>
+
+  <label>Замір тиску газу на виході:
+    <input type="number" step="1" id="line1_out" disabled> мм.вод.ст
+  </label><br><br>
+</fieldset>
 
     <fieldset>
-      <legend>Лінія 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+  <legend>Лінія 2</legend>
+  <label>
+    <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
+  </label><br><br>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line2_in" > МПа
-      </label><br><br>
+  <label>Замір тиску газу на вході:
+    <input type="number" step="0.01" id="line2_in" disabled> МПа
+  </label><br><br>
 
-     <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line2_filter_in" > МПа
-      </label><br><br>
+  <label>Замір тиску газу на вході у фільтр:
+    <input type="number" step="0.01" id="line2_filter_in" disabled> МПа
+  </label><br><br>
 
-     <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line2_filter_out" > МПа
-      </label><br><br>
+  <label>Замір тиску газу на виході з фільтра:
+    <input type="number" step="0.01" id="line2_filter_out" disabled> МПа
+  </label><br><br>
 
-     <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line2_out" > мм.вод.ст
-      </label>
-    </fieldset>
+  <label>Замір тиску газу на виході:
+    <input type="number" step="1" id="line2_out" disabled> мм.вод.ст
+  </label><br><br>
+</fieldset>
     
               <h4>Усунуто витоків газу</h4>
     
     <fieldset>
-      <legend>на лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
-
       <label>на газопроводі високого тиску:
         <input type="number" step="1" id="line1_leak3" > шт
       </label><br><br>
@@ -91,11 +86,6 @@
     </fieldset>
 
     <fieldset>
-      <legend>на лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
-
       <label>на газопроводі високого тиску:
         <input type="number" step="1" id="line2_leak3" > шт
       </label><br><br>
