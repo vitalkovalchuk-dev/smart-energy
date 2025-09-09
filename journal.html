@@ -11,6 +11,15 @@
     pre { margin: 0; font-family: monospace; }
     .filters { margin-bottom: 10px; }
   </style>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("header.html")
+        .then(response => response.text())
+        .then(data => {
+          document.body.insertAdjacentHTML("afterbegin", data);
+        });
+    });
+  </script>
 </head>
 <body>
   <h1>Електронний журнал</h1>
