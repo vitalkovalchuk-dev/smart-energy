@@ -7,7 +7,6 @@
       <li><a href="documentation.html">Технічна документація</a>
         <ul>
           <li><a href="service.html">Сервіс</a></li>
-          
           <li><a href="passport.html">Протокол ПРГ</a></li>
           <li><a href="project.html">Робочий проект</a></li>
           <li><a href="docs.html">Виконавчо-технічна документація</a></li>
@@ -44,14 +43,12 @@
       <button class="menu-close">✖</button>
     </div>
 
-    <!-- Головне меню -->
     <ul data-level="root">
       <li><a href="#" data-submenu="documentation">Технічна документація</a></li>
       <li><a href="#" data-submenu="works">Виконання робіт</a></li>
       <li><a href="instructions.html">Інструкції та навчальні відео</a></li>
     </ul>
 
-    <!-- Підменю: документація -->
     <ul data-level="documentation" data-parent="root" style="display:none;">
       <li><a href="passport.html">Протокол ПРГ</a></li>
       <li><a href="project.html">Робочий проект</a></li>
@@ -60,7 +57,6 @@
       <li><a href="mode.html">Режимна картка роботи обладнання</a></li>
     </ul>
 
-    <!-- Підменю: роботи -->
     <ul data-level="works" data-parent="root" style="display:none;">
       <li><a href="list_prg.html">Графіки проведення робіт</a></li>
       <li><a href="inspection.html">Технічний огляд</a></li>
@@ -77,10 +73,48 @@
   <div id="menuOverlay" class="menu-overlay"></div>
 </header>
 
-<!-- Підключення скрипта -->
-<script src="js_script.js"></script>
+<script src="js/js_script.js" defer></script>
 
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const burger = document.querySelector(".burger");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const closeBtn = mobileMenu.querySelector(".menu-close");
+  const backBtn = mobileMenu.querySelector(".menu-back");
+  const overlay = document.getElementById("menuOverlay");
 
+  burger.addEventListener("click", () => {
+    mobileMenu.style.display = "block";
+    overlay.style.display = "block";
+  });
 
+  closeBtn.addEventListener("click", () => {
+    mobileMenu.style.display = "none";
+    overlay.style.display = "none";
+  });
 
+  backBtn.addEventListener("click", () => {
+    // повертаємось на root
+    mobileMenu.querySelectorAll("ul[data-level]").forEach(ul => {
+      if (ul.dataset.level !== "root") ul.style.display = "none";
+    });
+    mobileMenu.querySelector('ul[data-level="root"]').style.display = "block";
+  });
 
+  // Перемикання підменю
+  mobileMenu.querySelectorAll('a[data-submenu]').forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const submenu = link.dataset.submenu;
+      mobileMenu.querySelectorAll('ul[data-level]').forEach(ul => ul.style.display = "none");
+      const target = mobileMenu.querySelector(`ul[data-level="${submenu}"]`);
+      if (target) target.style.display = "block";
+    });
+  });
+
+  overlay.addEventListener("click", () => {
+    mobileMenu.style.display = "none";
+    overlay.style.display = "none";
+  });
+});
+</script>
