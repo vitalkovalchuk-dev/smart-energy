@@ -10,125 +10,58 @@
     document.addEventListener("DOMContentLoaded", function () {
       fetch("header.html")
         .then(response => response.text())
-        .then(data => { document.body.insertAdjacentHTML("afterbegin", data); });
+        .then(data => {
+          document.body.insertAdjacentHTML("afterbegin", data);
+        });
     });
   </script>
 </head>
 <body>
   <main>
-    <h2>Технічний огляд обладнання</h2>
+    <h1>Технічний огляд</h1>
 
-    <form id="inspectionForm">
-      <p>Замір тиску газу по кожній задіяній лінії:</p>
-
-      <fieldset>
-        <legend>Лінія 1</legend>
-        <label><input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>На вході: <input type="number" step="0.01" id="line1_in" disabled> МПа</label><br><br>
-        <label>На вході у фільтр: <input type="number" step="0.01" id="line1_filter_in" disabled> МПа</label><br><br>
-        <label>На виході з фільтра: <input type="number" step="0.01" id="line1_filter_out" disabled> МПа</label><br><br>
-        <label>На виході: <input type="number" step="1" id="line1_out" disabled> мм.вод.ст</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Лінія 2</legend>
-        <label><input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>На вході: <input type="number" step="0.01" id="line2_in" disabled> МПа</label><br><br>
-        <label>На вході у фільтр: <input type="number" step="0.01" id="line2_filter_in" disabled> МПа</label><br><br>
-        <label>На виході з фільтра: <input type="number" step="0.01" id="line2_filter_out" disabled> МПа</label><br><br>
-        <label>На виході: <input type="number" step="1" id="line2_out" disabled> мм.вод.ст</label>
-      </fieldset>
-
-      <h4>Усунуто витоків газу</h4>
-
-      <fieldset>
-        <legend>Лінія 1</legend>
-        <label><input type="checkbox" id="line1_leak_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>високого тиску: <input type="number" step="1" id="line1_leak3" disabled> шт</label><br><br>
-        <label>середнього тиску: <input type="number" step="1" id="line1_leak2" disabled> шт</label><br><br>
-        <label>низького тиску: <input type="number" step="1" id="line1_leak1" disabled> шт</label>
-      </fieldset>
-
-      <fieldset>
-        <legend>Лінія 2</legend>
-        <label><input type="checkbox" id="line2_leak_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>високого тиску: <input type="number" step="1" id="line2_leak3" disabled> шт</label><br><br>
-        <label>середнього тиску: <input type="number" step="1" id="line2_leak2" disabled> шт</label><br><br>
-        <label>низького тиску: <input type="number" step="1" id="line2_leak1" disabled> шт</label>
-      </fieldset>
-
-      <button type="submit">Передати дані</button>
-    </form>
-
-    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+    <section class="inspection-form">
+      <h2>Перевірка обладнання</h2>
+      <label>Стан лінії 1: <input type="checkbox" id="line1_status"></label><br>
+      <label>Стан лінії 2: <input type="checkbox" id="line2_status"></label><br>
+      <button id="sendDataBtn">Передати дані</button>
+    </section>
   </main>
 
+  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Активність числових полів за чекбоксами
-      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
-        cb.addEventListener("change", () => {
-          const fieldset = cb.closest("fieldset");
-          if (!fieldset) return;
-          fieldset.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
-        });
-        cb.dispatchEvent(new Event("change"));
-      });
+    function saveInspectionData() {
+      const data = {
+        time: new Date().toISOString(),
+        line1_status: document.getElementById("line1_status").checked,
+        line2_status: document.getElementById("line2_status").checked
+      };
 
-      const form = document.getElementById("inspectionForm");
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
+      const fileName = "PO.json";
 
-        // Збір даних
-        const data = {};
-        form.querySelectorAll("input").forEach(inp => {
-          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
-        });
-
-        const payload = {
-          file: "PO.json",
-          page: "inspection",
-          time: new Date().toISOString(),
-          data
-        };
-
-        // Відправка на сервер
+      let existingData = [];
+      const saved = localStorage.getItem(fileName);
+      if (saved) {
         try {
-          const res = await fetch("/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-          });
-          const result = await res.json();
-          if (result.success) {
-            alert("Дані успішно надіслані!");
-            form.reset();
-            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => cb.dispatchEvent(new Event("change")));
-          } else {
-            alert("Помилка: " + result.error);
-          }
-        } catch (err) {
-          alert("Не вдалося надіслати дані!");
-          console.error(err);
+          existingData = JSON.parse(saved);
+        } catch (e) {
+          existingData = [];
         }
+      }
 
-        // Додатково — журнал
-        try {
-          const journalPayload = {
-            page: "inspection",
-            time: new Date().toISOString(),
-            data
-          };
-          await fetch("/journal", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(journalPayload)
-          });
-        } catch (err) {
-          console.error("Не вдалося оновити журнал:", err);
-        }
-      });
-    });
+      existingData.push(data);
+      localStorage.setItem(fileName, JSON.stringify(existingData));
+
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
+      a.download = fileName;
+      a.click();
+
+      alert("Дані передано та збережено у " + fileName);
+    }
+
+    document.getElementById("sendDataBtn").addEventListener("click", saveInspectionData);
   </script>
 </body>
 </html>
