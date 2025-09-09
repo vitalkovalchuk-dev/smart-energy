@@ -70,20 +70,28 @@
     </fieldset>
 
  <h3>Регулювання обладнання (з режимної карти)</h3>
+    <p>Регулювання тиску газу по кожній задіяній лінії:</p>
+    <fieldset>
+      <legend>Лінія 1</legend>
+      <label>
+        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
+      </label><br><br>
+
+      <label>Встановлено тиск газу на виході:
+        <input type="number" step="1" id="line1_out" > мм.вод.ст
+      </label><br><br>
+    </fieldset>
 
     <fieldset>
-      <legend>Проведено регулювання на лінії 1</legend>
+      <legend>Лінія 2</legend>
       <label>
-        <input type="checkbox" id="line1_adjustment"> ВКЛ/ВИКЛ
+        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
       </label><br><br>
 
-     <legend>Проведено регулювання на лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_adjustment"> ВКЛ/ВИКЛ
-      </label><br><br>
-
-   </fieldset>
-
+     <label>Встановлено тиск газу на виході:
+        <input type="number" step="1" id="line2_out" > мм.вод.ст
+      </label>
+    </fieldset>
     
   <h4>Усунуто витоків газу</h4>
     
