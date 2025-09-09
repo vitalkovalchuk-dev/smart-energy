@@ -17,141 +17,182 @@
   </script>
 </head>
 <body>
- 
-    <main>
-<h2>Регулювання обладнання</h2>
-<h3>Технічний огляд обладнання</h3>
-      <form id="inspectionForm">
-    <p>Замір тиску газу по кожній задіяній лінії:</p>
-    <fieldset>
-      <legend>Лінія 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+  <main>
+    <h2>Регулювання обладнання</h2>
+    <h3>Технічний огляд обладнання</h3>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line1_in" > МПа
-      </label><br><br>
+    <form id="inspectionForm">
+      <fieldset>
+        <legend>Лінія 1</legend>
+        <label>
+          <input type="checkbox" id="line1_status_adj"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-      <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line1_filter_in" > МПа
-      </label><br><br>
+        <label>Замір тиску газу на вході:
+          <input type="number" step="0.01" id="line1_in" disabled> МПа
+        </label><br><br>
 
-      <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line1_filter_out" > МПа
-      </label><br><br>
-  
-      <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line1_out" > мм.вод.ст
-      </label><br><br>
-    </fieldset>
+        <label>Замір тиску газу на вході у фільтр:
+          <input type="number" step="0.01" id="line1_filter_in" disabled> МПа
+        </label><br><br>
 
-    <fieldset>
-      <legend>Лінія 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>Замір тиску газу на виході з фільтра:
+          <input type="number" step="0.01" id="line1_filter_out" disabled> МПа
+        </label><br><br>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line2_in" > МПа
-      </label><br><br>
+        <label>Замір тиску газу на виході:
+          <input type="number" step="1" id="line1_out" disabled> мм.вод.ст
+        </label><br><br>
+      </fieldset>
 
-     <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line2_filter_in" > МПа
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 2</legend>
+        <label>
+          <input type="checkbox" id="line2_status_adj"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-     <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line2_filter_out" > МПа
-      </label><br><br>
+        <label>Замір тиску газу на вході:
+          <input type="number" step="0.01" id="line2_in" disabled> МПа
+        </label><br><br>
 
-     <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line2_out" > мм.вод.ст
-      </label>
-    </fieldset>
+        <label>Замір тиску газу на вході у фільтр:
+          <input type="number" step="0.01" id="line2_filter_in" disabled> МПа
+        </label><br><br>
 
- <h3>Регулювання обладнання (з режимної карти)</h3>
-    <p>Регулювання тиску газу по кожній задіяній лінії:</p>
-    <fieldset>
-      <legend>Лінія 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>Замір тиску газу на виході з фільтра:
+          <input type="number" step="0.01" id="line2_filter_out" disabled> МПа
+        </label><br><br>
 
-      <label>Встановлено тиск газу на виході:
-        <input type="number" step="1" id="line1_out" > мм.вод.ст
-      </label><br><br>
-    </fieldset>
+        <label>Замір тиску газу на виході:
+          <input type="number" step="1" id="line2_out" disabled> мм.вод.ст
+        </label>
+      </fieldset>
 
-    <fieldset>
-      <legend>Лінія 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+      <h3>Регулювання обладнання (з режимної карти)</h3>
+      <fieldset>
+        <legend>Лінія 1</legend>
+        <label>
+          <input type="checkbox" id="line1_status_reg"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-     <label>Встановлено тиск газу на виході:
-        <input type="number" step="1" id="line2_out" > мм.вод.ст
-      </label>
-    </fieldset>
-    
-  <h4>Усунуто витоків газу</h4>
-    
-    <fieldset>
-      <legend>на лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>Встановлено тиск газу на виході:
+          <input type="number" step="1" id="line1_out_reg" disabled> мм.вод.ст
+        </label><br><br>
+      </fieldset>
 
-      <label>на газопроводі високого тиску:
-        <input type="number" step="1" id="line1_leak3" > шт
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 2</legend>
+        <label>
+          <input type="checkbox" id="line2_status_reg"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-      <label>на газопроводі середнього тиску:
-        <input type="number" step="1" id="line1_leak2" > шт
-      </label> 
+        <label>Встановлено тиск газу на виході:
+          <input type="number" step="1" id="line2_out_reg" disabled> мм.вод.ст
+        </label>
+      </fieldset>
 
-      <label>на газопроводі низького тиску:
-        <input type="number" step="1" id="line1_leak1" > шт
-      </label>
-    </fieldset>
+      <h4>Усунуто витоків газу</h4>
+      <fieldset>
+        <legend>на лінії 1</legend>
+        <label>
+          <input type="checkbox" id="line1_status_leak"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-    <fieldset>
-      <legend>на лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>на газопроводі високого тиску:
+          <input type="number" step="1" id="line1_leak3" disabled> шт
+        </label><br><br>
 
-      <label>на газопроводі високого тиску:
-        <input type="number" step="1" id="line2_leak3" > шт
-      </label><br><br>
+        <label>на газопроводі середнього тиску:
+          <input type="number" step="1" id="line1_leak2" disabled> шт
+        </label>
 
-      <label>на газопроводі середнього тиску:
-        <input type="number" step="1" id="line2_leak2" > шт
-      </label> 
+        <label>на газопроводі низького тиску:
+          <input type="number" step="1" id="line1_leak1" disabled> шт
+        </label>
+      </fieldset>
 
-      <label>на газопроводі низького тиску:
-        <input type="number" step="1" id="line2_leak1" > шт
-      </label>
-    </fieldset>
-    
-    <button type="submit">Передати дані</button>
-  </form>
+      <fieldset>
+        <legend>на лінії 2</legend>
+        <label>
+          <input type="checkbox" id="line2_status_leak"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+        <label>на газопроводі високого тиску:
+          <input type="number" step="1" id="line2_leak3" disabled> шт
+        </label><br><br>
 
+        <label>на газопроводі середнього тиску:
+          <input type="number" step="1" id="line2_leak2" disabled> шт
+        </label>
+
+        <label>на газопроводі низького тиску:
+          <input type="number" step="1" id="line2_leak1" disabled> шт
+        </label>
+      </fieldset>
+
+      <button type="submit">Передати дані</button>
+    </form>
+
+    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
   </main>
 
   <script>
-    function goBackOneLevel() {
-      let path = window.location.pathname.split("/");
-      if (path.length > 2) {
-        path.pop(); // прибираємо поточний файл
-        window.location.href = path.join("/") + "/";
-      } else {
-        // якщо ми вже в корені сайту
-        window.location.href = "/";
-      }
-    }
-    </script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Керування активністю полів
+      document.querySelectorAll("input[type=checkbox][id*='_status']").forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+          const fieldset = checkbox.closest("fieldset");
+          if (!fieldset) return;
+          const inputs = fieldset.querySelectorAll("input[type=number]");
+          inputs.forEach(inp => inp.disabled = !checkbox.checked);
+        });
+        checkbox.dispatchEvent(new Event("change")); // виставляємо стан при завантаженні
+      });
 
+      // Відправка даних
+      const form = document.getElementById("inspectionForm");
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const data = {};
+          form.querySelectorAll("input").forEach(inp => {
+            if (inp.type === "checkbox") {
+              data[inp.id] = inp.checked;
+            } else {
+              data[inp.id] = inp.value;
+            }
+          });
+
+          try {
+            const res = await fetch("/save", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                file: "ADJ.json",
+                time: new Date().toISOString(),
+                data
+              })
+            });
+
+            const result = await res.json();
+            if (result.success) {
+              alert("Дані успішно надіслані!");
+              form.reset();
+              // після reset — викликаємо знову подію, щоб inputs стали disabled
+              document.querySelectorAll("input[type=checkbox][id*='_status']").forEach(cb => {
+                cb.dispatchEvent(new Event("change"));
+              });
+            } else {
+              alert("Помилка: " + result.error);
+            }
+          } catch (err) {
+            alert("Не вдалося надіслати дані!");
+            console.error(err);
+          }
+        });
+      }
+    });
+  </script>
 </body>
 </html>
