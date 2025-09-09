@@ -210,5 +210,62 @@
       }
     });
   </script>
+
+  <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const form = document.querySelector("form"); // або конкретна форма
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    // 1. Визначаємо тип сторінки (для server.js)
+    let page = "";
+    if (location.pathname.includes("inspection")) page = "inspection";
+    else if (location.pathname.includes("maintenance")) page = "maintenance";
+    else if (location.pathname.includes("repair")) page = "repair";
+    else if (location.pathname.includes("adjustment")) page = "adjustment";
+    else if (location.pathname.includes("vk")) page = "vk";
+
+    // 2. Збираємо дані з усіх input/checkbox
+    const inputs = form.querySelectorAll("input, select, textarea");
+    const data = {};
+    inputs.forEach(el => {
+      if (el.type === "checkbox") {
+        data[el.id] = el.checked;
+      } else {
+        data[el.id] = el.value;
+      }
+    });
+
+    // 3. Формуємо пакет
+    const payload = {
+      page,
+      time: new Date().toISOString(),
+      data
+    };
+
+    // 4. Відправка на сервер
+    try {
+      const res = await fetch("/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        alert("✅ Дані збережено!");
+        form.reset(); // Очистити форму
+      } else {
+        alert("❌ Помилка: " + result.error);
+      }
+    } catch (err) {
+      alert("⚠ Сервер недоступний");
+      console.error(err);
+    }
+  });
+});
+</script>
+
+  
 </body>
 </html>
