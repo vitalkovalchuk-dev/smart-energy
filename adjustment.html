@@ -21,7 +21,8 @@
     <h2>Регулювання обладнання</h2>
     <h3>Технічний огляд обладнання</h3>
 
-    <form id="inspectionForm">
+    <form id="adjustmentForm">
+      <!-- ====== Лінія 1 ====== -->
       <fieldset>
         <legend>Лінія 1</legend>
         <label>
@@ -45,6 +46,7 @@
         </label><br><br>
       </fieldset>
 
+      <!-- ====== Лінія 2 ====== -->
       <fieldset>
         <legend>Лінія 2</legend>
         <label>
@@ -68,7 +70,9 @@
         </label>
       </fieldset>
 
+      <!-- ====== Регулювання (режимна карта) ====== -->
       <h3>Регулювання обладнання (з режимної карти)</h3>
+
       <fieldset>
         <legend>Лінія 1</legend>
         <label>
@@ -78,15 +82,15 @@
         <label>Встановлено тиск газу на виході регулятора:
           <input type="number" step="1" id="line1_out_reg" disabled> мм.вод.ст
         </label><br><br>
-        
-       <label>Встановлено тиск газу на ЗЗК:
+
+        <label>Встановлено тиск газу на ЗЗК:
           <input type="number" step="1" id="line1_out_zzk" disabled> мм.вод.ст
         </label><br><br>
 
-       <label>Встановлено тиск газу на ЗСК:
+        <label>Встановлено тиск газу на ЗСК:
           <input type="number" step="1" id="line1_out_zsk" disabled> мм.вод.ст
         </label><br><br>
-       </fieldset>
+      </fieldset>
 
       <fieldset>
         <legend>Лінія 2</legend>
@@ -98,16 +102,18 @@
           <input type="number" step="1" id="line2_out_reg" disabled> мм.вод.ст
         </label><br><br>
 
-       <label>Встановлено тиск газу на ЗЗК:
+        <label>Встановлено тиск газу на ЗЗК:
           <input type="number" step="1" id="line2_out_zzk" disabled> мм.вод.ст
         </label><br><br>
 
-       <label>Встановлено тиск газу на ЗСК:
+        <label>Встановлено тиск газу на ЗСК:
           <input type="number" step="1" id="line2_out_zsk" disabled> мм.вод.ст
         </label><br><br>
       </fieldset>
 
+      <!-- ====== Усунено витоків газу ====== -->
       <h4>Усунуто витоків газу</h4>
+
       <fieldset>
         <legend>на лінії 1</legend>
         <label>
@@ -120,7 +126,7 @@
 
         <label>на газопроводі середнього тиску:
           <input type="number" step="1" id="line1_leak2" disabled> шт
-        </label>
+        </label><br><br>
 
         <label>на газопроводі низького тиску:
           <input type="number" step="1" id="line1_leak1" disabled> шт
@@ -139,7 +145,7 @@
 
         <label>на газопроводі середнього тиску:
           <input type="number" step="1" id="line2_leak2" disabled> шт
-        </label>
+        </label><br><br>
 
         <label>на газопроводі низького тиску:
           <input type="number" step="1" id="line2_leak1" disabled> шт
@@ -154,118 +160,69 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Керування активністю полів
-      document.querySelectorAll("input[type=checkbox][id*='_status']").forEach(checkbox => {
+      // ====== Керування чекбоксами ======
+      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(checkbox => {
         checkbox.addEventListener("change", () => {
           const fieldset = checkbox.closest("fieldset");
           if (!fieldset) return;
           const inputs = fieldset.querySelectorAll("input[type=number]");
           inputs.forEach(inp => inp.disabled = !checkbox.checked);
         });
-        checkbox.dispatchEvent(new Event("change")); // виставляємо стан при завантаженні
+        checkbox.dispatchEvent(new Event("change"));
       });
 
-      // Відправка даних
-      const form = document.getElementById("inspectionForm");
-      if (form) {
-        form.addEventListener("submit", async (e) => {
-          e.preventDefault();
+      // ====== Універсальна відправка даних + журнал ======
+      const form = document.getElementById("adjustmentForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
 
-          const data = {};
-          form.querySelectorAll("input").forEach(inp => {
-            if (inp.type === "checkbox") {
-              data[inp.id] = inp.checked;
-            } else {
-              data[inp.id] = inp.value;
-            }
+        const data = {};
+        const inputs = form.querySelectorAll("input");
+        inputs.forEach(inp => {
+          let labelText = inp.closest("label")?.textContent.trim() || inp.id;
+          let unitMatch = labelText.match(/([^\d]+)$/);
+          let unit = unitMatch ? unitMatch[1].trim() : "";
+          data[inp.id] = {
+            value: inp.type === "checkbox" ? inp.checked : inp.value,
+            label: labelText,
+            unit: unit
+          };
+        });
+
+        const payload = {
+          page: "adjustment",
+          time: new Date().toISOString(),
+          data
+        };
+
+        try {
+          // ====== Збереження в ADJ.json ======
+          await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file: "ADJ.json", ...payload })
           });
 
-          try {
-            const res = await fetch("/save", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                file: "ADJ.json",
-                time: new Date().toISOString(),
-                data
-              })
-            });
+          // ====== Додатково в електронний журнал ======
+          await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ file: "journal.json", ...payload })
+          });
 
-            const result = await res.json();
-            if (result.success) {
-              alert("Дані успішно надіслані!");
-              form.reset();
-              // після reset — викликаємо знову подію, щоб inputs стали disabled
-              document.querySelectorAll("input[type=checkbox][id*='_status']").forEach(cb => {
-                cb.dispatchEvent(new Event("change"));
-              });
-            } else {
-              alert("Помилка: " + result.error);
-            }
-          } catch (err) {
-            alert("Не вдалося надіслати дані!");
-            console.error(err);
-          }
-        });
-      }
+          alert("✅ Дані успішно надіслані!");
+          form.reset();
+          // Поновлюємо стан полів після reset
+          document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+            cb.dispatchEvent(new Event("change"));
+          });
+
+        } catch (err) {
+          alert("❌ Помилка відправки!");
+          console.error(err);
+        }
+      });
     });
   </script>
-
-  <script>
-document.addEventListener("DOMContentLoaded", () => {
-  const form = document.querySelector("form"); // або конкретна форма
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    // 1. Визначаємо тип сторінки (для server.js)
-    let page = "";
-    if (location.pathname.includes("inspection")) page = "inspection";
-    else if (location.pathname.includes("maintenance")) page = "maintenance";
-    else if (location.pathname.includes("repair")) page = "repair";
-    else if (location.pathname.includes("adjustment")) page = "adjustment";
-    else if (location.pathname.includes("vk")) page = "vk";
-
-    // 2. Збираємо дані з усіх input/checkbox
-    const inputs = form.querySelectorAll("input, select, textarea");
-    const data = {};
-    inputs.forEach(el => {
-      if (el.type === "checkbox") {
-        data[el.id] = el.checked;
-      } else {
-        data[el.id] = el.value;
-      }
-    });
-
-    // 3. Формуємо пакет
-    const payload = {
-      page,
-      time: new Date().toISOString(),
-      data
-    };
-
-    // 4. Відправка на сервер
-    try {
-      const res = await fetch("/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      const result = await res.json();
-      if (result.success) {
-        alert("✅ Дані збережено!");
-        form.reset(); // Очистити форму
-      } else {
-        alert("❌ Помилка: " + result.error);
-      }
-    } catch (err) {
-      alert("⚠ Сервер недоступний");
-      console.error(err);
-    }
-  });
-});
-</script>
-
-  
 </body>
 </html>
