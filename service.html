@@ -7,25 +7,6 @@
 
   <!-- стилі -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- основний скрипт (бургер-меню, чекбокси, форма) -->
-  <script src="js/script.js" defer></script>
-
-  <!-- підвантаження хедера -->
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("header.html")
-        .then(response => {
-          if (!response.ok) throw new Error("Не знайдено header.html");
-          return response.text();
-        })
-        .then(data => {
-          document.body.insertAdjacentHTML("afterbegin", data);
-          initBurgerMenu(); // 🚀 запускаємо бургер-меню після вставки
-        })
-        .catch(err => console.error("Помилка завантаження хедера:", err));
-    });
-  </script>
 </head>
 <body>
   <main>
@@ -48,6 +29,23 @@
       <a href="instructions.html" class="btn">Інструкції та навчальні відео</a>  
     </div>
   </main>
+
+  <!-- підключення основного скрипта -->
+  <script src="js/script.js"></script>
+
+  <!-- підвантаження хедера + запуск меню -->
+  <script>
+    fetch("header.html")
+      .then(response => {
+        if (!response.ok) throw new Error("Не знайдено header.html");
+        return response.text();
+      })
+      .then(data => {
+        document.body.insertAdjacentHTML("afterbegin", data);
+        initBurgerMenu(); // 🚀 меню тепер гарантовано працює
+      })
+      .catch(err => console.error("Помилка завантаження хедера:", err));
+  </script>
 
   <!-- логіка користувача -->
   <script>
