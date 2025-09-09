@@ -4,71 +4,178 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Фотофіксація</title>
-  <link rel="stylesheet" href="css/style.css">
-  <script src="js/script.js" defer></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      fetch("header.html")
-        .then(response => response.text())
-        .then(data => {
-          document.body.insertAdjacentHTML("afterbegin", data);
-        });
-    });
-  </script>
-</head>
-<body>
-    
-  <main>
-    <h1>Фотофіксація стану об’єкта</h1>
-    <form id="photoForm" enctype="multipart/form-data">
-      <label for="photoUpload">Завантажте фото:</label><br>
-      <input type="file" id="photoUpload" name="photoUpload" accept="image/*"><br><br>
-      <button type="submit">Зберегти фото</button>
-    </form>
-    <div id="photoGallery">
-      <p>Тут буде відображатися галерея завантажених фото.</p>
-    </div>
-  </main>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
 
-    <h2>Фото ПРГ (станом на 20.03.2023) </h2>
+    h2 {
+      margin-top: 40px;
+    }
 
-    <div class="gallery">
-      <button class="prev" onclick="prevImage()">❮</button>
-      <button class="next" onclick="nextImage()">❯</button>
-      <img src="img/Foto/ШРП №61_new_1.jpg" alt="Фото 1">
-      <img src="img/Foto/ШРП №61_new_2.jpg" alt="Фото 2">
-      <img src="img/Foto/ШРП №61_new_3.jpg" alt="Фото 3">
-      <img src="img/Foto/ШРП №61_new_4.jpg" alt="Фото 4">
-      <img src="img/Foto/ШРП №61_new_5.jpg" alt="Фото 5">
-    </div>
-  
-  <h2>Фото ПРГ (станом на 05.02.2023) </h2>
+    /* Галерея */
+    .gallery {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
 
-    <div class="gallery">
-      <button class="prev" onclick="prevImage()">❮</button>
-      <button class="next" onclick="nextImage()">❯</button>
-      <img src="img/Foto/ШРП №61_old_1.jpg" alt="Фото 1">
-      <img src="img/Foto/ШРП №61_old_2.jpg" alt="Фото 2">
-      <img src="img/Foto/ШРП №61_old_3.jpg" alt="Фото 3">
-      <img src="img/Foto/ШРП №61_old_4.jpg" alt="Фото 4">
-    </div>
-  
+    .gallery img {
+      width: 100%;
+      max-width: 800px;  /* обмеження для десктопа */
+      max-height: 70vh;  /* щоб фото не займало весь екран */
+      object-fit: contain;
+      display: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
-<button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+    .gallery img.active {
+      display: block;
+    }
 
-    
-  <script>
-    function goBackOneLevel() {
-      let path = window.location.pathname.split("/");
-      if (path.length > 2) {
-        path.pop(); // прибираємо поточний файл
-        window.location.href = path.join("/") + "/";
-      } else {
-        // якщо ми вже в корені сайту
-        window.location.href = "/";
+    .gallery button {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0, 0, 0, 0.5);
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      cursor: pointer;
+      border-radius: 50%;
+      font-size: 20px;
+    }
+
+    .gallery .prev { left: 10px; }
+    .gallery .next { right: 10px; }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.9);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .lightbox img {
+      max-width: 95vw;  /* адаптивне обмеження для мобільних */
+      max-height: 90vh;
+      border-radius: 10px;
+    }
+
+    .lightbox .close {
+      position: absolute;
+      top: 20px; right: 30px;
+      font-size: 40px;
+      color: white;
+      cursor: pointer;
+    }
+
+    /* Кнопка назад */
+    .btn-back {
+      margin-top: 50px;
+      padding: 10px 20px;
+      background: #444;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .btn-back:hover {
+      background: #222;
+    }
+
+    /* Адаптивність */
+    @media (max-width: 768px) {
+      .gallery img {
+        max-width: 95vw; /* майже вся ширина екрану на мобільному */
       }
     }
-    </script>
+  </style>
+</head>
+<body>
+  <h1>Фотофіксація стану об’єкта</h1>
 
+  <h2>Фото ПРГ (станом на 20.03.2023)</h2>
+  <div class="gallery">
+    <button class="prev">❮</button>
+    <button class="next">❯</button>
+    <img src="img/Foto/ШРП №61_new_1.jpg" alt="Фото 1" class="active">
+    <img src="img/Foto/ШРП №61_new_2.jpg" alt="Фото 2">
+    <img src="img/Foto/ШРП №61_new_3.jpg" alt="Фото 3">
+    <img src="img/Foto/ШРП №61_new_4.jpg" alt="Фото 4">
+    <img src="img/Foto/ШРП №61_new_5.jpg" alt="Фото 5">
+  </div>
+
+  <h2>Фото ПРГ (станом на 05.02.2023)</h2>
+  <div class="gallery">
+    <button class="prev">❮</button>
+    <button class="next">❯</button>
+    <img src="img/Foto/ШРП №61_old_1.jpg" alt="Фото 1" class="active">
+    <img src="img/Foto/ШРП №61_old_2.jpg" alt="Фото 2">
+    <img src="img/Foto/ШРП №61_old_3.jpg" alt="Фото 3">
+    <img src="img/Foto/ШРП №61_old_4.jpg" alt="Фото 4">
+  </div>
+
+  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="close">&times;</span>
+    <img src="" alt="Перегляд фото">
+  </div>
+
+  <script>
+    // Галереї
+    document.querySelectorAll(".gallery").forEach(gallery => {
+      const images = gallery.querySelectorAll("img");
+      const prevBtn = gallery.querySelector(".prev");
+      const nextBtn = gallery.querySelector(".next");
+      let currentIndex = 0;
+
+      function showImage(index) {
+        images.forEach(img => img.classList.remove("active"));
+        images[index].classList.add("active");
+      }
+
+      prevBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage(currentIndex);
+      });
+
+      nextBtn.addEventListener("click", () => {
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage(currentIndex);
+      });
+
+      // Відкриття lightbox при кліку
+      images.forEach(img => {
+        img.addEventListener("click", () => {
+          document.getElementById("lightbox").style.display = "flex";
+          document.querySelector("#lightbox img").src = img.src;
+        });
+      });
+    });
+
+    // Закриття lightbox
+    document.querySelector(".lightbox .close").addEventListener("click", () => {
+      document.getElementById("lightbox").style.display = "none";
+    });
+
+    document.getElementById("lightbox").addEventListener("click", (e) => {
+      if (e.target === e.currentTarget) {
+        e.currentTarget.style.display = "none";
+      }
+    });
+  </script>
 </body>
 </html>
