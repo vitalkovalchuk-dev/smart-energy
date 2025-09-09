@@ -209,3 +209,62 @@ function calcDistance(lat1, lon1, lat2, lon2) {
 
   return Math.round(R * c);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  // Для всіх чекбоксів з id, що закінчується на "_status"
+  document.querySelectorAll("input[type=checkbox][id$='_status']").forEach(checkbox => {
+    checkbox.addEventListener("change", () => {
+      // Беремо всі input у тому ж fieldset
+      const fieldset = checkbox.closest("fieldset");
+      if (!fieldset) return;
+
+      const inputs = fieldset.querySelectorAll("input[type=number]");
+      inputs.forEach(input => {
+        input.disabled = !checkbox.checked;
+      });
+    });
+
+    // Виклик при завантаженні, щоб початковий стан був правильний
+    checkbox.dispatchEvent(new Event("change"));
+  });
+
+  // Обробка форми
+  const form = document.getElementById("inspectionForm");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {};
+      form.querySelectorAll("input").forEach(inp => {
+        if (inp.type === "checkbox") {
+          data[inp.id] = inp.checked;
+        } else {
+          data[inp.id] = inp.value;
+        }
+      });
+
+      try {
+        const res = await fetch("/save", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            file: "ADJ.json",   // 🔹 тут файл
+            time: new Date().toISOString(),
+            data
+          })
+        });
+
+        const result = await res.json();
+        if (result.success) {
+          alert("Дані успішно надіслані!");
+          form.reset();
+        } else {
+          alert("Помилка: " + result.error);
+        }
+      } catch (err) {
+        alert("Не вдалося надіслати дані!");
+        console.error(err);
+      }
+    });
+  }
+});
