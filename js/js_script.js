@@ -86,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // ====== Валідація та відправка форми ======
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("fullForm");
-  if (!form) return; // Якщо на сторінці немає форми, нічого не робимо
+  if (!form) return; // Якщо на сторінці немає форми
 
   form.addEventListener("submit", function (e) {
     e.preventDefault(); // зупиняємо стандартну відправку
@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Перевіримо: якщо лінія увімкнена, тиск має бути вказаний
+    // Перевірка: якщо лінія увімкнена, тиск має бути вказаний
     const enabledLines = ['line1', 'line2'].filter(line => formData[`${line}_enabled`]);
 
     for (const line of enabledLines) {
@@ -119,15 +119,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     console.log("📋 Дані для відправки:", formData);
-
-    // Якщо потрібно надіслати на сервер:
-    // fetch('/api/save', {
-    //   method: 'POST',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify(formData)
-    // }).then(res => res.json()).then(data => {
-    //   alert('Дані збережено!');
-    // });
 
     alert("✅ Дані зібрано. Перевір консоль.");
   });
