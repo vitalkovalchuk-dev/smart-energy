@@ -129,4 +129,28 @@
           line1_leak2: parseInt(document.getElementById("line1_leak2").value) || 0,
           line1_leak3: parseInt(document.getElementById("line1_leak3").value) || 0,
           line2_leak1: parseInt(document.getElementById("line2_leak1").value) || 0,
-          line2_leak2: parseInt(document.getElementById("line2_le
+          line2_leak2: parseInt(document.getElementById("line2_leak2").value) || 0,
+          line2_leak3: parseInt(document.getElementById("line2_leak3").value) || 0
+        };
+
+        const fileName = "ADJ.json";
+        let existingData = [];
+        const saved = localStorage.getItem(fileName);
+        if (saved) {
+          try { existingData = JSON.parse(saved); } 
+          catch(e){ existingData = []; }
+        }
+        existingData.push(data);
+        localStorage.setItem(fileName, JSON.stringify(existingData));
+
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
+        a.download = fileName;
+        a.click();
+
+        alert("Дані передано та збережено у " + fileName);
+      });
+    });
+  </script>
+</body>
+</html>
