@@ -19,14 +19,14 @@
     .gallery {
       position: relative;
       max-width: 800px;
-      margin: 0 auto;
+      margin: 20px auto;
       overflow: hidden;
     }
 
     .gallery img {
       width: 100%;
-      max-width: 800px;  /* обмеження для десктопа */
-      max-height: 70vh;  /* щоб фото не займало весь екран */
+      max-width: 800px;
+      max-height: 70vh;
       object-fit: contain;
       display: none;
       border-radius: 10px;
@@ -53,6 +53,33 @@
     .gallery .prev { left: 10px; }
     .gallery .next { right: 10px; }
 
+    /* Форма */
+    form {
+      margin: 30px auto;
+      max-width: 500px;
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background: #f9f9f9;
+    }
+
+    form input[type="file"] {
+      margin: 10px 0;
+    }
+
+    form button {
+      padding: 8px 16px;
+      border: none;
+      background: #444;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background: #222;
+    }
+
     /* Lightbox */
     .lightbox {
       display: none;
@@ -66,7 +93,7 @@
     }
 
     .lightbox img {
-      max-width: 95vw;  /* адаптивне обмеження для мобільних */
+      max-width: 95vw;
       max-height: 90vh;
       border-radius: 10px;
     }
@@ -97,7 +124,7 @@
     /* Адаптивність */
     @media (max-width: 768px) {
       .gallery img {
-        max-width: 95vw; /* майже вся ширина екрану на мобільному */
+        max-width: 95vw;
       }
     }
   </style>
@@ -105,7 +132,14 @@
 <body>
   <h1>Фотофіксація стану об’єкта</h1>
 
-  <h2>Фото ПРГ (станом на 20.05.2023)</h2>
+  <!-- Форма завантаження (демо) -->
+  <form id="photoForm" enctype="multipart/form-data">
+    <label for="photoUpload">Завантажте фото:</label><br>
+    <input type="file" id="photoUpload" name="photoUpload" accept="image/*"><br><br>
+    <button type="submit">Зберегти фото</button>
+  </form>
+
+  <h2>Фото ПРГ (станом на 20.03.2023)</h2>
   <div class="gallery">
     <button class="prev">❮</button>
     <button class="next">❯</button>
@@ -175,6 +209,12 @@
       if (e.target === e.currentTarget) {
         e.currentTarget.style.display = "none";
       }
+    });
+
+    // Форма працює тільки як демо
+    document.getElementById("photoForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      alert("Це демоверсія. У реальній версії фото буде завантажуватись у папку.");
     });
   </script>
 </body>
