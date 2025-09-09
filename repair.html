@@ -17,165 +17,171 @@
   </script>
 </head>
 <body>
- 
   <main>
     <h2>Плановий ремонт</h2>
 
-    <h3>Технічний огляд обладнання</h3>
+    <form id="repairForm">
+      <h3>Замір тиску газу по кожній задіяній лінії:</h3>
 
-          <form id="inspectionForm">
-    <p>Замір тиску газу по кожній задіяній лінії:</p>
-    <fieldset>
-      <legend>Лінія 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 1</legend>
+        <label>
+          <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line1_in" > МПа
-      </label><br><br>
+        <label>На вході:
+          <input type="number" step="0.01" id="line1_in" disabled> МПа
+        </label><br><br>
 
-      <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line1_filter_in" > МПа
-      </label><br><br>
+        <label>На вході у фільтр:
+          <input type="number" step="0.01" id="line1_filter_in" disabled> МПа
+        </label><br><br>
 
-      <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line1_filter_out" > МПа
-      </label><br><br>
-  
-      <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line1_out" > мм.вод.ст
-      </label><br><br>
-    </fieldset>
+        <label>На виході з фільтра:
+          <input type="number" step="0.01" id="line1_filter_out" disabled> МПа
+        </label><br><br>
 
-    <fieldset>
-      <legend>Лінія 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>На виході:
+          <input type="number" step="1" id="line1_out" disabled> мм.вод.ст
+        </label><br><br>
+      </fieldset>
 
-      <label>Замір тиску газу на вході:
-        <input type="number" step="0.01" id="line2_in" > МПа
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 2</legend>
+        <label>
+          <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
+        </label><br><br>
 
-     <label>Замір тиску газу на вході у фільтр:
-        <input type="number" step="0.01" id="line2_filter_in" > МПа
-      </label><br><br>
+        <label>На вході:
+          <input type="number" step="0.01" id="line2_in" disabled> МПа
+        </label><br><br>
 
-     <label>Замір тиску газу на виході з фільтра:
-        <input type="number" step="0.01" id="line2_filter_out" > МПа
-      </label><br><br>
+        <label>На вході у фільтр:
+          <input type="number" step="0.01" id="line2_filter_in" disabled> МПа
+        </label><br><br>
 
-     <label>Замір тиску газу на виході:
-        <input type="number" step="1" id="line2_out" > мм.вод.ст
-      </label>
-    </fieldset>
+        <label>На виході з фільтра:
+          <input type="number" step="0.01" id="line2_filter_out" disabled> МПа
+        </label><br><br>
 
-  <h3>Під час проведення планового ремонту було виконано:</h3>
-      <h4>Лінія 1:</h4>
-        <legend>-очищення фільтра лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_filter_in"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну регулятора тиску лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_regulator"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну ЗЗК лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_zzk"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну ЗСК лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_zsk"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну відключаючих пристроїв лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_vp"> ВКЛ/ВИКЛ
-      </label><br><br>
+        <label>На виході:
+          <input type="number" step="1" id="line2_out" disabled> мм.вод.ст
+        </label><br><br>
+      </fieldset>
 
-        <h4>Лінія 2:</h4>
-         <legend>-очищення фільтра лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_filter_in"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну регулятора тиску лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_regulator"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну ЗЗК лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_zzk"> ВКЛ/ВИКЛ
-      </label><br><br>
-      <legend>-заміну ЗСК лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_zsk"> ВКЛ/ВИКЛ
-      </label><br><br>
-        <legend>-заміну відключаючих пристроїв лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_vp"> ВКЛ/ВИКЛ
-      </label><br><br>
-        
-              <h4>Усунуто витоків газу</h4>
-    
-    <fieldset>
-      <legend>на лінії 1</legend>
-      <label>
-        <input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+      <h3>Під час ремонту виконано:</h3>
 
-      <label>на газопроводі високого тиску:
-        <input type="number" step="1" id="line1_leak3" > шт
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 1</legend>
+        <label><input type="checkbox" id="line1_clean_filter"> очищення фільтра</label><br>
+        <label><input type="checkbox" id="line1_regulator"> заміна регулятора</label><br>
+        <label><input type="checkbox" id="line1_zzk"> заміна ЗЗК</label><br>
+        <label><input type="checkbox" id="line1_zsk"> заміна ЗСК</label><br>
+        <label><input type="checkbox" id="line1_vp"> заміна відключаючих пристроїв</label><br>
+      </fieldset>
 
-      <label>на газопроводі середнього тиску:
-        <input type="number" step="1" id="line1_leak2" > шт
-      </label> 
+      <fieldset>
+        <legend>Лінія 2</legend>
+        <label><input type="checkbox" id="line2_clean_filter"> очищення фільтра</label><br>
+        <label><input type="checkbox" id="line2_regulator"> заміна регулятора</label><br>
+        <label><input type="checkbox" id="line2_zzk"> заміна ЗЗК</label><br>
+        <label><input type="checkbox" id="line2_zsk"> заміна ЗСК</label><br>
+        <label><input type="checkbox" id="line2_vp"> заміна відключаючих пристроїв</label><br>
+      </fieldset>
 
-      <label>на газопроводі низького тиску:
-        <input type="number" step="1" id="line1_leak1" > шт
-      </label>
-    </fieldset>
+      <h4>Усунуто витоків газу</h4>
 
-    <fieldset>
-      <legend>на лінії 2</legend>
-      <label>
-        <input type="checkbox" id="line2_status"> ВКЛ/ВИКЛ
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 1</legend>
+        <label>
+          <input type="checkbox" id="line1_leak_status"> ВКЛ/ВИКЛ
+        </label><br><br>
+        <label>високого тиску:
+          <input type="number" step="1" id="line1_leak3" disabled> шт
+        </label><br><br>
+        <label>середнього тиску:
+          <input type="number" step="1" id="line1_leak2" disabled> шт
+        </label><br><br>
+        <label>низького тиску:
+          <input type="number" step="1" id="line1_leak1" disabled> шт
+        </label>
+      </fieldset>
 
-      <label>на газопроводі високого тиску:
-        <input type="number" step="1" id="line2_leak3" > шт
-      </label><br><br>
+      <fieldset>
+        <legend>Лінія 2</legend>
+        <label>
+          <input type="checkbox" id="line2_leak_status"> ВКЛ/ВИКЛ
+        </label><br><br>
+        <label>високого тиску:
+          <input type="number" step="1" id="line2_leak3" disabled> шт
+        </label><br><br>
+        <label>середнього тиску:
+          <input type="number" step="1" id="line2_leak2" disabled> шт
+        </label><br><br>
+        <label>низького тиску:
+          <input type="number" step="1" id="line2_leak1" disabled> шт
+        </label>
+      </fieldset>
 
-      <label>на газопроводі середнього тиску:
-        <input type="number" step="1" id="line2_leak2" > шт
-      </label> 
+      <button type="submit">Передати дані</button>
+    </form>
 
-      <label>на газопроводі низького тиску:
-        <input type="number" step="1" id="line2_leak1" > шт
-      </label>
-    </fieldset>
-        
-    <button type="submit">Передати дані</button>
-  </form>
-  
-<button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
-
-
+    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
   </main>
 
   <script>
-    function goBackOneLevel() {
-      let path = window.location.pathname.split("/");
-      if (path.length > 2) {
-        path.pop(); // прибираємо поточний файл
-        window.location.href = path.join("/") + "/";
-      } else {
-        // якщо ми вже в корені сайту
-        window.location.href = "/";
-      }
-    }
-    </script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Активність числових полів за чекбоксами
+      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(checkbox => {
+        checkbox.addEventListener("change", () => {
+          const fieldset = checkbox.closest("fieldset");
+          if (!fieldset) return;
+          const inputs = fieldset.querySelectorAll("input[type=number]");
+          inputs.forEach(inp => inp.disabled = !checkbox.checked);
+        });
+        checkbox.dispatchEvent(new Event("change"));
+      });
 
+      // Відправка даних у PR.json
+      const form = document.getElementById("repairForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {};
+        form.querySelectorAll("input").forEach(inp => {
+          if (inp.type === "checkbox") {
+            data[inp.id] = inp.checked;
+          } else {
+            data[inp.id] = inp.value;
+          }
+        });
+
+        try {
+          const res = await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              file: "PR.json",
+              time: new Date().toISOString(),
+              data
+            })
+          });
+          const result = await res.json();
+          if (result.success) {
+            alert("Дані збережено!");
+            form.reset();
+            // після reset знову блокуємо поля
+            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+              cb.dispatchEvent(new Event("change"));
+            });
+          } else {
+            alert("Помилка: " + result.error);
+          }
+        } catch (err) {
+          alert("Не вдалося надіслати дані!");
+          console.error(err);
+        }
+      });
+    });
+  </script>
 </body>
 </html>
