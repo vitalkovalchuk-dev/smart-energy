@@ -2,116 +2,97 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Електронний журнал</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background: #f0f0f0; cursor: pointer; }
-    pre { margin: 0; font-family: monospace; white-space: pre-wrap; }
-    .filters { margin-bottom: 10px; }
-    .btn-back { margin-top: 20px; }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/js_script.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("header.html")
+        .then(response => response.text())
+        .then(data => {
+          document.body.insertAdjacentHTML("afterbegin", data);
+        });
+    });
+  </script>
 </head>
 <body>
-  <h1>Електронний журнал</h1>
+  <main>
+    <h2>Електронний журнал</h2>
 
-  <div class="filters">
-    <label>Сторінка:
-      <select id="pageFilter">
-        <option value="all">Всі</option>
-        <option value="PO.json">Технічний огляд</option>
-        <option value="TO.json">Технічне обслуговування</option>
-        <option value="PR.json">Плановий ремонт</option>
-        <option value="ADJ.json">Регулювання</option>
-        <option value="VK.json">Відомчий контроль</option>
-      </select>
-    </label>
+    <form id="journalForm">
+      <fieldset>
+        <legend>Фільтрувати записи</legend>
+        <label>Дата початку: <input type="date" id="journal_start"></label><br>
+        <label>Дата кінця: <input type="date" id="journal_end"></label><br>
+        <label>Тип процедури:
+          <select id="journal_type">
+            <option value="PO">Технічний огляд</option>
+            <option value="TO">Технічне обслуговування</option>
+            <option value="PR">Плановий ремонт</option>
+            <option value="ADJ">Регулювання</option>
+            <option value="VK">Відомчий контроль</option>
+          </select>
+        </label>
+      </fieldset>
 
-    <label>Дата від:
-      <input type="date" id="dateFrom">
-    </label>
-    <label>до:
-      <input type="date" id="dateTo">
-    </label>
-    <button onclick="applyFilters()">Фільтрувати</button>
-    <button onclick="resetFilters()">Скинути</button>
-  </div>
+      <fieldset>
+        <legend>Дані запису</legend>
+        <label>Назва поля: <input type="text" id="journal_field"></label><br>
+        <label>Значення: <input type="text" id="journal_value"></label><br>
+        <label>Одиниця виміру: <input type="text" id="journal_unit"></label><br>
+        <label><input type="checkbox" id="journal_active"> Активний</label>
+      </fieldset>
 
-  <table id="logTable">
-    <thead>
-      <tr>
-        <th>Час</th>
-        <th>Сторінка</th>
-        <th>Дані</th>
-      </tr>
-    </thead>
-    <tbody id="logBody"></tbody>
-  </table>
+      <button type="submit">Передати дані</button>
+    </form>
 
-  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+  </main>
 
   <script>
-    const logBody = document.getElementById("logBody");
-    let journalData = [];
-
-    async function loadJournal() {
-      try {
-        const res = await fetch("/data/journal.json?_=" + Date.now()); // уникаємо кешу
-        if (!res.ok) throw new Error("Не вдалося завантажити journal.json");
-        journalData = await res.json();
-        renderTable(journalData);
-      } catch (err) {
-        console.error(err);
-        logBody.innerHTML = `<tr><td colspan="3">⚠️ Не вдалося завантажити журнал</td></tr>`;
-      }
-    }
-
-    function renderTable(data) {
-      logBody.innerHTML = "";
-      if (data.length === 0) {
-        logBody.innerHTML = `<tr><td colspan="3">Журнал порожній</td></tr>`;
-        return;
-      }
-
-      for (const row of data) {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-          <td>${new Date(row.time).toLocaleString("uk-UA")}</td>
-          <td>${row.source}</td>
-          <td><pre>${row.summary}</pre></td>
-        `;
-        logBody.appendChild(tr);
-      }
-    }
-
-    function applyFilters() {
-      const pageValue = document.getElementById("pageFilter").value;
-      const dateFrom = document.getElementById("dateFrom").value;
-      const dateTo = document.getElementById("dateTo").value;
-
-      const filtered = journalData.filter(row => {
-        const rowTime = new Date(row.time);
-        let visible = true;
-
-        if (pageValue !== "all" && row.source !== pageValue) visible = false;
-        if (dateFrom && rowTime < new Date(dateFrom)) visible = false;
-        if (dateTo && rowTime > new Date(dateTo + "T23:59:59")) visible = false;
-
-        return visible;
+    document.addEventListener("DOMContentLoaded", () => {
+      // Активність полів через чекбокс
+      const activeCheckbox = document.getElementById("journal_active");
+      const inputs = document.querySelectorAll("#journalForm input[type=text]");
+      activeCheckbox.addEventListener("change", () => {
+        inputs.forEach(inp => inp.disabled = !activeCheckbox.checked);
       });
+      activeCheckbox.dispatchEvent(new Event("change"));
 
-      renderTable(filtered);
-    }
+      // Відправка даних у JOURNAL.json
+      const form = document.getElementById("journalForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {};
+        form.querySelectorAll("input, select").forEach(inp => {
+          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
+        });
 
-    function resetFilters() {
-      document.getElementById("pageFilter").value = "all";
-      document.getElementById("dateFrom").value = "";
-      document.getElementById("dateTo").value = "";
-      renderTable(journalData);
-    }
-
-    loadJournal();
+        try {
+          const res = await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              file: "JOURNAL.json",
+              time: new Date().toISOString(),
+              data
+            })
+          });
+          const result = await res.json();
+          if (result.success) {
+            alert("Дані успішно збережено!");
+            form.reset();
+            activeCheckbox.dispatchEvent(new Event("change"));
+          } else {
+            alert("Помилка: " + result.error);
+          }
+        } catch (err) {
+          alert("Не вдалося надіслати дані!");
+          console.error(err);
+        }
+      });
+    });
   </script>
 </body>
 </html>
