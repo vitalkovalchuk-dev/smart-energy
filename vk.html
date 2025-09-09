@@ -18,33 +18,23 @@
 </head>
 <body>
   <main>
-    <h2>Відомчий контроль</h2>
+       <h1>Відомчий контроль</h1>
 
-    <form id="vkForm">
-      <fieldset>
-        <legend>Контроль обладнання</legend>
-        <label><input type="checkbox" id="vk_line1_status"> Лінія 1 - ВКЛ/ВИКЛ</label><br>
-        <label><input type="checkbox" id="vk_line2_status"> Лінія 2 - ВКЛ/ВИКЛ</label><br>
-      </fieldset>
+    <section class="remarks">
+      <h2>Виявлені недоліки / зауваження</h2>
+      <textarea id="remarksInput" rows="5" placeholder="Введіть зауваження..."></textarea>
+      <br>
+      <button onclick="saveRemark()">Зберегти</button>
+    </section>
 
-      <fieldset>
-        <legend>Результати вимірювань</legend>
-        <label>Лінія 1: <input type="number" id="vk_line1_val" step="0.01" disabled> МПа</label><br>
-        <label>Лінія 2: <input type="number" id="vk_line2_val" step="0.01" disabled> МПа</label><br>
-      </fieldset>
-
-      <fieldset>
-        <legend>Додаткові перевірки</legend>
-        <label><input type="checkbox" id="vk_leak1"> Витік високого тиску</label><br>
-        <label><input type="checkbox" id="vk_leak2"> Витік середнього тиску</label><br>
-        <label><input type="checkbox" id="vk_leak3"> Витік низького тиску</label><br>
-      </fieldset>
-
-      <button type="submit">Передати дані</button>
-    </form>
-
-    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+    <section class="journal-access">
+      <h2>Електронний журнал</h2>
+      <p>Для перегляду та фільтрації подій скористайтесь журналом нижче:</p>
+      <iframe src="journal.html" width="100%" height="500" style="border:1px solid #ccc; border-radius:8px;"></iframe>
+    </section>
   </main>
+
+  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
