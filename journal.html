@@ -4,111 +4,84 @@
   <meta charset="UTF-8">
   <title>Електронний журнал</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h2 { color: #1d4ed8; }
-    table { border-collapse: collapse; width: 100%; margin-top: 20px; }
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
     th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
-    th { background: #f0f0f0; }
-    .filter { margin: 10px 0; }
-    .filter label { margin-right: 15px; }
-    select, input { padding: 5px; }
-    button { padding: 6px 12px; background: #1d4ed8; color: white; border: none; border-radius: 6px; cursor: pointer; }
-    button:hover { background: #2563eb; }
+    th { background: #f0f0f0; cursor: pointer; }
+    pre { margin: 0; font-family: monospace; }
+    .filters { margin-bottom: 10px; }
   </style>
 </head>
 <body>
-  <h2>Електронний журнал</h2>
+  <h1>Електронний журнал</h1>
 
-  <div class="filter">
-    <label>Фільтр по ролі:
-      <select id="roleFilter">
-        <option value="">Усі</option>
-        <option value="Admin">Admin</option>
-        <option value="Team">Team</option>
-        <option value="Kontrol">Kontrol</option>
-      </select>
-    </label>
-    <label>Фільтр по користувачу:
-      <input type="text" id="userFilter" placeholder="ПІБ або логін">
-    </label>
-    <label>Фільтр по сторінці:
+  <div class="filters">
+    <label>Сторінка:
       <select id="pageFilter">
-        <option value="">Усі</option>
-        <option value="TO">TO</option>
-        <option value="PO">PO</option>
-        <option value="ADJ">ADJ</option>
-        <option value="PR">PR</option>
-        <option value="VK">VK</option>
+        <option value="all">Всі</option>
+        <option value="inspection">Технічний огляд</option>
+        <option value="maintenance">Технічне обслуговування</option>
+        <option value="repair">Плановий ремонт</option>
+        <option value="adjustment">Регулювання</option>
+        <option value="vk">Відомчий контроль</option>
       </select>
     </label>
-    <button onclick="renderTable()">Фільтрувати</button>
+
+    <label>Дата від:
+      <input type="date" id="dateFrom">
+    </label>
+    <label>до:
+      <input type="date" id="dateTo">
+    </label>
+    <button onclick="applyFilters()">Фільтрувати</button>
+    <button onclick="resetFilters()">Скинути</button>
   </div>
 
   <table id="logTable">
     <thead>
       <tr>
         <th>Час</th>
-        <th>Ім’я</th>
-        <th>Роль</th>
         <th>Сторінка</th>
-        <th>Дія</th>
-        <th>Деталі</th>
-        <th>Геолокація</th>
-        <th>Відстань (м)</th>
+        <th>Дані</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="logBody">
+      <!-- записи будуть вставлені сервером -->
+    </tbody>
   </table>
 
   <script>
-    async function loadLogs() {
-      const files = ["TO.json", "PO.json", "ADJ.json", "PR.json", "VK.json"];
-      let allLogs = [];
+    const logTable = document.getElementById("logTable");
+    const logBody = document.getElementById("logBody");
 
-      for (const file of files) {
-        try {
-          const res = await fetch(`http://localhost:3000/data/${file}`);
-          if (res.ok) {
-            const data = await res.json();
-            allLogs = allLogs.concat(data.map(r => ({...r, page: file.replace(".json", "")})));
-          }
-        } catch (err) {
-          console.warn(`Не вдалося завантажити ${file}`);
-        }
+    function applyFilters() {
+      const pageValue = document.getElementById("pageFilter").value;
+      const dateFrom = document.getElementById("dateFrom").value;
+      const dateTo = document.getElementById("dateTo").value;
+
+      for (const row of logBody.rows) {
+        const rowPage = row.cells[1].textContent;
+        const rowTime = new Date(row.cells[0].textContent);
+
+        let visible = true;
+
+        // Фільтр по сторінці
+        if (pageValue !== "all" && rowPage !== pageValue) visible = false;
+
+        // Фільтр по даті
+        if (dateFrom) visible = visible && (rowTime >= new Date(dateFrom));
+        if (dateTo) visible = visible && (rowTime <= new Date(dateTo + "T23:59:59"));
+
+        row.style.display = visible ? "" : "none";
       }
-      return allLogs;
     }
 
-    async function renderTable() {
-      const logs = await loadLogs();
-      const roleFilter = document.getElementById("roleFilter").value;
-      const userFilter = document.getElementById("userFilter").value.toLowerCase();
-      const pageFilter = document.getElementById("pageFilter").value;
-
-      const tbody = document.querySelector("#logTable tbody");
-      tbody.innerHTML = "";
-
-      logs
-        .filter(log => (!roleFilter || log.role === roleFilter))
-        .filter(log => (!userFilter || log.user.toLowerCase().includes(userFilter)))
-        .filter(log => (!pageFilter || log.page === pageFilter))
-        .forEach(log => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${log.time || ""}</td>
-            <td>${log.user || ""}</td>
-            <td>${log.role || ""}</td>
-            <td>${log.page || ""}</td>
-            <td>${log.action || ""}</td>
-            <td>${log.details || ""}</td>
-            <td>${log.geo ? (log.geo.lat.toFixed(4) + ", " + log.geo.lng.toFixed(4)) : ""}</td>
-            <td>${log.distance || ""}</td>
-          `;
-          tbody.appendChild(tr);
-        });
+    function resetFilters() {
+      document.getElementById("pageFilter").value = "all";
+      document.getElementById("dateFrom").value = "";
+      document.getElementById("dateTo").value = "";
+      applyFilters();
     }
-
-    renderTable();
   </script>
 </body>
 </html>
