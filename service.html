@@ -4,26 +4,35 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Сервіс</title>
+
+  <!-- стилі -->
   <link rel="stylesheet" href="css/style.css">
-<script src="js/script.js" defer></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    fetch("header.html")
-      .then(response => response.text())
-      .then(data => {
-        document.body.insertAdjacentHTML("afterbegin", data);
-        initBurgerMenu(); // запускаємо бургер-меню після вставки
-      })
-      .catch(err => console.error("Помилка завантаження хедера:", err));
-  });
-</script>
+
+  <!-- основний скрипт (бургер-меню, чекбокси, форма) -->
+  <script src="js/script.js" defer></script>
+
+  <!-- підвантаження хедера -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("header.html")
+        .then(response => {
+          if (!response.ok) throw new Error("Не знайдено header.html");
+          return response.text();
+        })
+        .then(data => {
+          document.body.insertAdjacentHTML("afterbegin", data);
+          initBurgerMenu(); // 🚀 запускаємо бургер-меню після вставки
+        })
+        .catch(err => console.error("Помилка завантаження хедера:", err));
+    });
+  </script>
 </head>
 <body>
   <main>
-<section class="user-info">
-  <h2>Інформація про користувача</h2>
-  <div id="userInfo"></div>
-</section>
+    <section class="user-info">
+      <h2>Інформація про користувача</h2>
+      <div id="userInfo"></div>
+    </section>
     
     <h1>Сервісна сторінка</h1>
     <p>ПРГ перебуває в зоні експлуатаційної відповідальності Калинівської дільниці ВФ ТОВ "Газорозподільні мережі України"</p>
@@ -36,36 +45,31 @@
       <a href="info.html" class="btn">Короткі відомості про ПРГ</a>
       <a href="documentation.html" class="btn">Технічна документація</a>  
       <a href="works.html" class="btn">Виконання робіт</a>  
-      <a href="vk.html" class="btn">Відомчий контроль</a>
-      <a href="journal.html" class="btn">Електронний журнал</a>
-            <a href="instructions.html" class="btn">Інструкції та навчальні відео</a>  
+      <a href="instructions.html" class="btn">Інструкції та навчальні відео</a>  
     </div>
-      
-    <div id="userInfo"></div>
   </main>
 
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const container = document.getElementById("userInfo");
-  const data = localStorage.getItem("currentUser");
+  <!-- логіка користувача -->
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const container = document.getElementById("userInfo");
+      const data = localStorage.getItem("currentUser");
 
-  if (!data) {
-    container.innerHTML = "<p style='color:red'>Доступ заборонено. Авторизуйтесь через головну сторінку з підтверженням геолокації.</p>";
-    return;
-  }
+      if (!data) {
+        container.innerHTML = "<p style='color:red'>Доступ заборонено. Авторизуйтесь через головну сторінку з підтверженням геолокації.</p>";
+        return;
+      }
 
-  const user = JSON.parse(data);
+      const user = JSON.parse(data);
 
-  container.innerHTML = `
-    <p><b>Ім’я:</b> ${user.name}</p>
-    <p><b>Роль:</b> ${user.role}</p>
-    <p><b>Email:</b> ${user.email}</p>
-    <p><b>Координати:</b> ${user.latitude}, ${user.longitude}</p>
-    <p><b>Час входу:</b> ${new Date(user.loginTime).toLocaleString()}</p>
-  `;
-});
-</script>
-
-  
+      container.innerHTML = `
+        <p><b>Ім’я:</b> ${user.name}</p>
+        <p><b>Роль:</b> ${user.role}</p>
+        <p><b>Email:</b> ${user.email}</p>
+        <p><b>Координати:</b> ${user.latitude}, ${user.longitude}</p>
+        <p><b>Час входу:</b> ${new Date(user.loginTime).toLocaleString()}</p>
+      `;
+    });
+  </script>
 </body>
 </html>
