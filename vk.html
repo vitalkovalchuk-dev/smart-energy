@@ -15,14 +15,31 @@
         });
     });
   </script>
+  <style>
+    /* Адаптивне поле для коментаря */
+    #remarksInput {
+      width: 100%;
+      max-width: 100%;
+      min-height: 5em;       /* ~5 рядків тексту */
+      max-height: 6em;       /* ~6 рядків тексту */
+      resize: vertical;
+      overflow-y: auto;
+      padding: 0.5em;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .remarks button {
+      margin-top: 0.5em;
+    }
+  </style>
 </head>
 <body>
   <main>
-       <h1>Відомчий контроль</h1>
+    <h1>Відомчий контроль</h1>
 
     <section class="remarks">
       <h2>Виявлені недоліки / зауваження</h2>
-      <textarea id="remarksInput" rows="5" placeholder="Введіть зауваження..."></textarea>
+      <textarea id="remarksInput" placeholder="Введіть зауваження..."></textarea>
       <br>
       <button onclick="saveRemark()">Зберегти</button>
     </section>
@@ -37,52 +54,34 @@
   <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Керування активністю числових полів через чекбокси
-      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
-        cb.addEventListener("change", () => {
-          const fs = cb.closest("fieldset");
-          if (!fs) return;
-          fs.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
-        });
-        cb.dispatchEvent(new Event("change"));
-      });
+    // Локальне збереження коментаря в VK.json
+    function saveRemark() {
+      const text = document.getElementById("remarksInput").value.trim();
+      if (!text) {
+        alert("Введіть текст зауваження!");
+        return;
+      }
 
-      // Відправка даних у VK.json
-      const form = document.getElementById("vkForm");
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const data = {};
-        form.querySelectorAll("input").forEach(inp => {
-          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
-        });
+      const remark = {
+        time: new Date().toISOString(),
+        user: "currentUser", // тут підставиш авторизованого користувача
+        role: "Kontrol",     // роль, яка залишає зауваження
+        action: "remark",
+        details: text
+      };
 
-        try {
-          const res = await fetch("/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              file: "VK.json",
-              time: new Date().toISOString(),
-              data
-            })
-          });
-          const result = await res.json();
-          if (result.success) {
-            alert("Дані успішно збережено!");
-            form.reset();
-            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
-              cb.dispatchEvent(new Event("change"));
-            });
-          } else {
-            alert("Помилка: " + result.error);
-          }
-        } catch (err) {
-          alert("Не вдалося надіслати дані!");
-          console.error(err);
-        }
-      });
-    });
+      // Генерація файлу VK.json локально
+      const blob = new Blob([JSON.stringify(remark, null, 2)], { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = "VK.json";
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      // Очищення textarea
+      document.getElementById("remarksInput").value = "";
+      alert("Зауваження збережено локально у VK.json");
+    }
   </script>
 </body>
 </html>
