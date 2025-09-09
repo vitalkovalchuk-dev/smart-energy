@@ -176,7 +176,6 @@ header .logo {
   }
 }
 
-
 /* ===== Overlay для мобільного меню ===== */
 .menu-overlay {
   display: none;
@@ -191,4 +190,15 @@ header .logo {
 
 .menu-overlay.active {
   display: block;
+}
+
+/* ===== Іконка для маршрута до ПРГ ===== */
+.map-icon {
+  margin-left: 6px;
+  color: #1d4ed8;          /* синій */
+  transition: color 0.2s;
+}
+
+.map-icon:hover {
+  color: #dc2626;          /* червоний при наведенні */
 }
