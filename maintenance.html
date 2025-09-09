@@ -21,7 +21,7 @@
      <h2>Технічне обслуговування</h2>
 
     <form id="maintenanceForm">
-      <p>Замір тиску газу по кожній задіяній лінії:</p>
+      <h3>Замір тиску газу по кожній задіяній лінії:</h3>
 
       <fieldset>
         <legend>Лінія 1</legend>
@@ -83,43 +83,54 @@
         <label>низького тиску: <input type="number" step="1" id="line2_leak1" disabled> шт</label>
       </fieldset>
 
-      <button type="submit">Передати дані</button>
+      <button type="button" id="sendDataBtn">Передати дані</button>
     </form>
 
     <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
   </main>
+
   <script>
-    function saveMaintenanceData() {
-      const data = {
-        time: new Date().toISOString(),
-        line1_status: document.getElementById("line1_status").checked,
-        line2_status: document.getElementById("line2_status").checked
+    document.addEventListener("DOMContentLoaded", () => {
+      // Чекбокси керують числовими полями
+      const toggleFields = (checkboxId, fieldset) => {
+        const cb = document.getElementById(checkboxId);
+        cb.addEventListener("change", () => {
+          fieldset.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
+        });
+        cb.dispatchEvent(new Event("change"));
       };
 
-      const fileName = "TO.json";
+      toggleFields("line1_status", document.querySelector("fieldset[legend='Лінія 1']"));
+      toggleFields("line2_status", document.querySelector("fieldset[legend='Лінія 2']"));
+      toggleFields("line1_leak_status", document.querySelectorAll("fieldset")[6]);
+      toggleFields("line2_leak_status", document.querySelectorAll("fieldset")[7]);
 
-      let existingData = [];
-      const saved = localStorage.getItem(fileName);
-      if (saved) {
-        try {
-          existingData = JSON.parse(saved);
-        } catch (e) {
-          existingData = [];
+      // Збереження даних у TO.json локально
+      document.getElementById("sendDataBtn").addEventListener("click", () => {
+        const data = {
+          time: new Date().toISOString(),
+          line1_status: document.getElementById("line1_status").checked,
+          line2_status: document.getElementById("line2_status").checked,
+          // додатково можна додати інші поля
+        };
+
+        const fileName = "TO.json";
+        let existingData = [];
+        const saved = localStorage.getItem(fileName);
+        if (saved) {
+          try { existingData = JSON.parse(saved); } catch { existingData = []; }
         }
-      }
+        existingData.push(data);
+        localStorage.setItem(fileName, JSON.stringify(existingData));
 
-      existingData.push(data);
-      localStorage.setItem(fileName, JSON.stringify(existingData));
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
+        a.download = fileName;
+        a.click();
 
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
-      a.download = fileName;
-      a.click();
-
-      alert("Дані передано та збережено у " + fileName);
-    }
-
-    document.getElementById("sendDataBtn").addEventListener("click", saveMaintenanceData);
+        alert("Дані передано та збережено у " + fileName);
+      });
+    });
   </script>
 </body>
 </html>
