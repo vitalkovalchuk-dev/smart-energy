@@ -6,17 +6,21 @@
   <title>Технічне обслуговування</title>
   <link rel="stylesheet" href="css/style.css">
   <script src="js/js_script.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      fetch("header.html")
+        .then(response => response.text())
+        .then(data => { document.body.insertAdjacentHTML("afterbegin", data); });
+    });
+  </script>
 </head>
 <body>
-  <div id="header"></div>
-  <script>
-    fetch("header.html").then(r=>r.text()).then(html=>document.getElementById("header").innerHTML=html);
-  </script>
-
   <main>
     <h2>Технічне обслуговування</h2>
 
     <form id="maintenanceForm">
+      <p>Замір тиску газу по кожній задіяній лінії:</p>
+
       <fieldset>
         <legend>Лінія 1</legend>
         <label><input type="checkbox" id="line1_status"> ВКЛ/ВИКЛ</label><br><br>
@@ -36,6 +40,7 @@
       </fieldset>
 
       <h3>Під час ТО виконано:</h3>
+
       <fieldset>
         <legend>Лінія 1</legend>
         <label><input type="checkbox" id="line1_check_valves"> перевірка запірної арматури та запобіжних клапанів</label><br>
@@ -44,7 +49,7 @@
         <label><input type="checkbox" id="line1_check_regulator"> перевірка регулятора тиску</label><br>
         <label><input type="checkbox" id="line1_membrane"> визначення чутливості мембран</label><br>
         <label><input type="checkbox" id="line1_check_zzk_zsk"> перевірка ЗСК, ЗЗК</label><br>
-        <label><input type="checkbox" id="line1_clean_filter"> очищення фільтра</label>
+        <label><input type="checkbox" id="line1_clean_filter"> очищення фільтра</label><br>
       </fieldset>
 
       <fieldset>
@@ -55,24 +60,25 @@
         <label><input type="checkbox" id="line2_check_regulator"> перевірка регулятора тиску</label><br>
         <label><input type="checkbox" id="line2_membrane"> визначення чутливості мембран</label><br>
         <label><input type="checkbox" id="line2_check_zzk_zsk"> перевірка ЗСК, ЗЗК</label><br>
-        <label><input type="checkbox" id="line2_clean_filter"> очищення фільтра</label>
+        <label><input type="checkbox" id="line2_clean_filter"> очищення фільтра</label><br>
       </fieldset>
 
       <h4>Усунуто витоків газу</h4>
+
       <fieldset>
         <legend>Лінія 1</legend>
         <label><input type="checkbox" id="line1_leak_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>Високого тиску: <input type="number" step="1" id="line1_leak3" disabled> шт</label><br>
-        <label>Середнього тиску: <input type="number" step="1" id="line1_leak2" disabled> шт</label><br>
-        <label>Низького тиску: <input type="number" step="1" id="line1_leak1" disabled> шт</label>
+        <label>високого тиску: <input type="number" step="1" id="line1_leak3" disabled> шт</label><br><br>
+        <label>середнього тиску: <input type="number" step="1" id="line1_leak2" disabled> шт</label><br><br>
+        <label>низького тиску: <input type="number" step="1" id="line1_leak1" disabled> шт</label>
       </fieldset>
 
       <fieldset>
         <legend>Лінія 2</legend>
         <label><input type="checkbox" id="line2_leak_status"> ВКЛ/ВИКЛ</label><br><br>
-        <label>Високого тиску: <input type="number" step="1" id="line2_leak3" disabled> шт</label><br>
-        <label>Середнього тиску: <input type="number" step="1" id="line2_leak2" disabled> шт</label><br>
-        <label>Низького тиску: <input type="number" step="1" id="line2_leak1" disabled> шт</label>
+        <label>високого тиску: <input type="number" step="1" id="line2_leak3" disabled> шт</label><br><br>
+        <label>середнього тиску: <input type="number" step="1" id="line2_leak2" disabled> шт</label><br><br>
+        <label>низького тиску: <input type="number" step="1" id="line2_leak1" disabled> шт</label>
       </fieldset>
 
       <button type="submit">Передати дані</button>
@@ -82,34 +88,50 @@
   </main>
 
   <script>
-  document.addEventListener("DOMContentLoaded", ()=>{
-    document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb=>{
-      cb.addEventListener("change", ()=>{
-        const fs=cb.closest("fieldset");
-        if(!fs) return;
-        fs.querySelectorAll("input[type=number]").forEach(inp=>inp.disabled=!cb.checked);
+    document.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => {
+        cb.addEventListener("change", () => {
+          const fieldset = cb.closest("fieldset");
+          if (!fieldset) return;
+          fieldset.querySelectorAll("input[type=number]").forEach(inp => inp.disabled = !cb.checked);
+        });
+        cb.dispatchEvent(new Event("change"));
       });
-      cb.dispatchEvent(new Event("change"));
-    });
 
-    const form=document.getElementById("maintenanceForm");
-    form.addEventListener("submit", e=>{
-      e.preventDefault();
-      const data={};
-      form.querySelectorAll("input").forEach(inp=>data[inp.id]=inp.type==="checkbox"?inp.checked:inp.value);
+      const form = document.getElementById("maintenanceForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const data = {};
+        form.querySelectorAll("input").forEach(inp => { data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value; });
 
-      const payload={page:"maintenance", time:new Date().toISOString(), data};
-      const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement("a");
-      a.href=url; a.download="TO.json";
-      a.click();
-      URL.revokeObjectURL(url);
-      alert("✅ Дані готові до завантаження!");
-      form.reset();
-      document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb=>cb.dispatchEvent(new Event("change")));
+        const payload = { file: "TO.json", page: "maintenance", time: new Date().toISOString(), data };
+
+        try {
+          const res = await fetch("/save", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+          });
+          const result = await res.json();
+          if (result.success) {
+            alert("Дані успішно надіслані!");
+            form.reset();
+            document.querySelectorAll("input[type=checkbox][id*='status']").forEach(cb => cb.dispatchEvent(new Event("change")));
+          } else {
+            alert("Помилка: " + result.error);
+          }
+        } catch (err) {
+          alert("Не вдалося надіслати дані!");
+          console.error(err);
+        }
+
+        // Журнал
+        try {
+          const journalPayload = { page: "maintenance", time: new Date().toISOString(), data };
+          await fetch("/journal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(journalPayload) });
+        } catch (err) { console.error("Не вдалося оновити журнал:", err); }
+      });
     });
-  });
   </script>
 </body>
 </html>
