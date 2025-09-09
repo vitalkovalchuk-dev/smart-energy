@@ -12,8 +12,33 @@
         .then(response => response.text())
         .then(data => {
           document.body.insertAdjacentHTML("afterbegin", data);
+          // Після вставки header викликаємо ініціалізацію чекбоксів
+          initializeCheckboxes();
         });
     });
+
+    function initializeCheckboxes() {
+      const checkboxGroups = [
+        {checkbox: "line1_status_adj", numbers: ["line1_in","line1_filter_in","line1_filter_out","line1_out"]},
+        {checkbox: "line2_status_adj", numbers: ["line2_in","line2_filter_in","line2_filter_out","line2_out"]},
+        {checkbox: "line1_status_reg", numbers: ["line1_out_reg","line1_out_zzk","line1_out_zsk"]},
+        {checkbox: "line2_status_reg", numbers: ["line2_out_reg","line2_out_zzk","line2_out_zsk"]},
+        {checkbox: "line1_status_leak", numbers: ["line1_leak1","line1_leak2","line1_leak3"]},
+        {checkbox: "line2_status_leak", numbers: ["line2_leak1","line2_leak2","line2_leak3"]}
+      ];
+
+      checkboxGroups.forEach(group => {
+        const cb = document.getElementById(group.checkbox);
+        if (!cb) return; // безпечно перевіряємо існування
+        cb.addEventListener("change", () => {
+          group.numbers.forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.disabled = !cb.checked;
+          });
+        });
+        cb.dispatchEvent(new Event("change"));
+      });
+    }
   </script>
 </head>
 <body>
@@ -83,23 +108,8 @@
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // Логіка увімкнення/вимкнення числових полів за чекбоксами
-      const checkboxGroups = [
-        {checkbox: "line1_status_adj", numbers: ["line1_in","line1_filter_in","line1_filter_out","line1_out"]},
-        {checkbox: "line2_status_adj", numbers: ["line2_in","line2_filter_in","line2_filter_out","line2_out"]},
-        {checkbox: "line1_status_reg", numbers: ["line1_out_reg","line1_out_zzk","line1_out_zsk"]},
-        {checkbox: "line2_status_reg", numbers: ["line2_out_reg","line2_out_zzk","line2_out_zsk"]},
-        {checkbox: "line1_status_leak", numbers: ["line1_leak1","line1_leak2","line1_leak3"]},
-        {checkbox: "line2_status_leak", numbers: ["line2_leak1","line2_leak2","line2_leak3"]}
-      ];
-
-      checkboxGroups.forEach(group => {
-        const cb = document.getElementById(group.checkbox);
-        cb.addEventListener("change", () => {
-          group.numbers.forEach(id => document.getElementById(id).disabled = !cb.checked);
-        });
-        cb.dispatchEvent(new Event("change"));
-      });
+      // Виклик ініціалізації чекбоксів для випадку, якщо header вже завантажений
+      initializeCheckboxes();
 
       // Збереження даних у ADJ.json
       document.getElementById("sendDataBtn").addEventListener("click", () => {
@@ -144,9 +154,11 @@
         localStorage.setItem(fileName, JSON.stringify(existingData));
 
         const a = document.createElement("a");
-        a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
+        const url = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
+        a.href = url;
         a.download = fileName;
         a.click();
+        URL.revokeObjectURL(url); // очищення URL
 
         alert("Дані передано та збережено у " + fileName);
       });
