@@ -18,7 +18,7 @@
 </head>
 <body>
   <main>
-   <h2>Регулювання обладнання</h2>
+    <h2>Регулювання обладнання</h2>
     <h3>Замір тиску газу по кожній задіяній лінії</h3>
 
     <form id="adjustmentForm">
@@ -75,49 +75,58 @@
         <label>Низького тиску: <input type="number" step="1" id="line2_leak1" disabled> шт</label>
       </fieldset>
 
-      <button type="submit">Передати дані</button>
+      <button type="button" id="sendDataBtn">Передати дані</button>
     </form>
 
     <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
   </main>
-  
+
   <script>
-    // Функція для створення/доповнення JSON-файлу локально
-    function saveAdjustmentData() {
-      const data = {
-        time: new Date().toISOString(),
-        param1: document.getElementById("param1").value,
-        param2: document.getElementById("param2").value
-      };
+    document.addEventListener("DOMContentLoaded", () => {
+      // Логіка увімкнення/вимкнення числових полів за чекбоксами
+      const checkboxGroups = [
+        {checkbox: "line1_status_adj", numbers: ["line1_in","line1_filter_in","line1_filter_out","line1_out"]},
+        {checkbox: "line2_status_adj", numbers: ["line2_in","line2_filter_in","line2_filter_out","line2_out"]},
+        {checkbox: "line1_status_reg", numbers: ["line1_out_reg","line1_out_zzk","line1_out_zsk"]},
+        {checkbox: "line2_status_reg", numbers: ["line2_out_reg","line2_out_zzk","line2_out_zsk"]},
+        {checkbox: "line1_status_leak", numbers: ["line1_leak1","line1_leak2","line1_leak3"]},
+        {checkbox: "line2_status_leak", numbers: ["line2_leak1","line2_leak2","line2_leak3"]}
+      ];
 
-      const fileName = "ADJ.json";
+      checkboxGroups.forEach(group => {
+        const cb = document.getElementById(group.checkbox);
+        cb.addEventListener("change", () => {
+          group.numbers.forEach(id => document.getElementById(id).disabled = !cb.checked);
+        });
+        cb.dispatchEvent(new Event("change"));
+      });
 
-      // Завантаження існуючих даних з LocalStorage (імітація файлу)
-      let existingData = [];
-      const saved = localStorage.getItem(fileName);
-      if (saved) {
-        try {
-          existingData = JSON.parse(saved);
-        } catch (e) {
-          existingData = [];
-        }
-      }
-
-      existingData.push(data);
-
-      // Збереження "файлу" у LocalStorage
-      localStorage.setItem(fileName, JSON.stringify(existingData));
-
-      // Генерація завантажуваного JSON-файлу
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(new Blob([JSON.stringify(existingData, null, 2)], {type: "application/json"}));
-      a.download = fileName;
-      a.click();
-
-      alert("Дані передано та збережено у " + fileName);
-    }
-
-    document.getElementById("sendDataBtn").addEventListener("click", saveAdjustmentData);
-  </script>
-</body>
-</html>
+      // Збереження даних у ADJ.json
+      document.getElementById("sendDataBtn").addEventListener("click", () => {
+        const data = {
+          time: new Date().toISOString(),
+          line1_status_adj: document.getElementById("line1_status_adj").checked,
+          line2_status_adj: document.getElementById("line2_status_adj").checked,
+          line1_status_reg: document.getElementById("line1_status_reg").checked,
+          line2_status_reg: document.getElementById("line2_status_reg").checked,
+          line1_status_leak: document.getElementById("line1_status_leak").checked,
+          line2_status_leak: document.getElementById("line2_status_leak").checked,
+          line1_in: parseFloat(document.getElementById("line1_in").value) || 0,
+          line1_filter_in: parseFloat(document.getElementById("line1_filter_in").value) || 0,
+          line1_filter_out: parseFloat(document.getElementById("line1_filter_out").value) || 0,
+          line1_out: parseFloat(document.getElementById("line1_out").value) || 0,
+          line2_in: parseFloat(document.getElementById("line2_in").value) || 0,
+          line2_filter_in: parseFloat(document.getElementById("line2_filter_in").value) || 0,
+          line2_filter_out: parseFloat(document.getElementById("line2_filter_out").value) || 0,
+          line2_out: parseFloat(document.getElementById("line2_out").value) || 0,
+          line1_out_reg: parseFloat(document.getElementById("line1_out_reg").value) || 0,
+          line1_out_zzk: parseFloat(document.getElementById("line1_out_zzk").value) || 0,
+          line1_out_zsk: parseFloat(document.getElementById("line1_out_zsk").value) || 0,
+          line2_out_reg: parseFloat(document.getElementById("line2_out_reg").value) || 0,
+          line2_out_zzk: parseFloat(document.getElementById("line2_out_zzk").value) || 0,
+          line2_out_zsk: parseFloat(document.getElementById("line2_out_zsk").value) || 0,
+          line1_leak1: parseInt(document.getElementById("line1_leak1").value) || 0,
+          line1_leak2: parseInt(document.getElementById("line1_leak2").value) || 0,
+          line1_leak3: parseInt(document.getElementById("line1_leak3").value) || 0,
+          line2_leak1: parseInt(document.getElementById("line2_leak1").value) || 0,
+          line2_leak2: parseInt(document.getElementById("line2_le
