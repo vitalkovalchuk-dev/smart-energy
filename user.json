@@ -1,7 +1,8 @@
 [
   { "id": 1, "name": "Дячинський Роман", "login": "r.dyachinskiy", "password": "1234QWEqwe", "role": "Team", "email": "r.dyachinskiy@example.com" },
-  { "id": 1, "name": "Казмірчук Василь", "login": "v.kazmirchuk", "password": "1234QWEqwe", "role": "Team", "email": "v.kazmirchuk@example.com" },
-  { "id": 1, "name": "Пісарєва Світлана", "login": "s.pisareva", "password": "1234QWEqwe", "role": "Team", "email": "s.pisareva@example.com" },
-  { "id": 2, "name": "Ковальчук Віталій", "login": "v.kovalchuk", "password": "5678QWEqwe", "role": "Admin", "email": "v.kovalchuk@example.com" },
-  { "id": 3, "name": "Мельник Ігор", "login": "kontrol", "password": "0000", "role": "Kontrol", "email": "kontrol@example.com" }
+  { "id": 2, "name": "Казмірчук Василь", "login": "v.kazmirchuk", "password": "1234QWEqwe", "role": "Team", "email": "v.kazmirchuk@example.com" },
+  { "id": 3, "name": "Пісарєва Світлана", "login": "s.pisareva", "password": "1234QWEqwe", "role": "Team", "email": "s.pisareva@example.com" },
+  { "id": 4, "name": "Ковальчук Віталій", "login": "v.kovalchuk", "password": "5678QWEqwe", "role": "Admin", "email": "v.kovalchuk@example.com" },
+  { "id": 5, "name": "Візитер", "login": "Energia", "password": "1234", "role": "Visitor", "email": "Energia@example.com" },
+  { "id": 6, "name": "Мельник Ігор", "login": "kontrol", "password": "0000", "role": "Kontrol", "email": "kontrol@example.com" }
 ]
