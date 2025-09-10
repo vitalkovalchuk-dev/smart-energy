@@ -1,59 +1,58 @@
 // ====== Бургер-меню для мобільних ======
-function initBurgerMenu() {
+document.addEventListener("DOMContentLoaded", () => {
   const burger = document.querySelector(".burger");
-  const mobileMenu = document.querySelector(".mobile-menu");
-  const backBtn = document.querySelector(".menu-back");
-  const closeBtn = document.querySelector(".menu-close");
-  const menuTitle = document.querySelector(".menu-title");
+  const mobileMenu = document.getElementById("mobileMenu");
+  const closeBtn = mobileMenu ? mobileMenu.querySelector(".menu-close") : null;
+  const backBtn = mobileMenu ? mobileMenu.querySelector(".menu-back") : null;
+  const overlay = document.getElementById("menuOverlay");
 
-  if (!burger || !mobileMenu) return; // Якщо хедер ще не підвантажений
-
-  let currentMenu = mobileMenu.querySelector("ul[data-level='root']");
-
-  // Відкрити бургер-меню
-  burger.addEventListener("click", () => {
+  // Відкрити меню
+  function openMenu() {
+    if (!mobileMenu) return;
     mobileMenu.classList.add("active");
-    showMenu("root", "Меню");
-  });
+    if (overlay) overlay.classList.add("active");
+    // показати root-меню
+    mobileMenu.querySelectorAll("ul[data-level]").forEach(ul => ul.style.display = "none");
+    const root = mobileMenu.querySelector('ul[data-level="root"]');
+    if (root) root.style.display = "block";
+    if (backBtn) backBtn.style.visibility = "hidden";
+  }
 
   // Закрити меню
-  closeBtn.addEventListener("click", () => {
+  function closeMenu() {
+    if (!mobileMenu) return;
     mobileMenu.classList.remove("active");
-  });
+    if (overlay) overlay.classList.remove("active");
+  }
+
+  if (burger) burger.addEventListener("click", openMenu);
+  if (closeBtn) closeBtn.addEventListener("click", closeMenu);
+  if (overlay) overlay.addEventListener("click", closeMenu);
 
   // Кнопка "Назад"
-  backBtn.addEventListener("click", () => {
-    const parent = currentMenu.getAttribute("data-parent");
-    if (parent) {
-      showMenu(parent, parent === "root" ? "Меню" : parent);
-    }
+  if (backBtn) backBtn.addEventListener("click", () => {
+    mobileMenu.querySelectorAll("ul[data-level]").forEach(ul => ul.style.display = "none");
+    const root = mobileMenu.querySelector('ul[data-level="root"]');
+    if (root) root.style.display = "block";
+    backBtn.style.visibility = "hidden";
   });
 
-  // Клік по пункту з підменю
-  mobileMenu.addEventListener("click", function (e) {
-    const link = e.target.closest("a[data-submenu]");
-    if (link) {
-      e.preventDefault();
-      const submenu = link.getAttribute("data-submenu");
-      showMenu(submenu, link.textContent.trim());
-    }
-  });
-
-  // Функція показу меню
-  function showMenu(level, title) {
-    const menus = mobileMenu.querySelectorAll("ul");
-    menus.forEach((m) => (m.style.display = "none"));
-
-    const targetMenu = mobileMenu.querySelector(`ul[data-level='${level}']`);
-    if (targetMenu) {
-      targetMenu.style.display = "block";
-      currentMenu = targetMenu;
-    }
-
-    menuTitle.textContent = title;
-    backBtn.style.visibility = level === "root" ? "hidden" : "visible";
+  // Перемикання підменю
+  if (mobileMenu) {
+    mobileMenu.querySelectorAll('a[data-submenu]').forEach(link => {
+      link.addEventListener("click", e => {
+        e.preventDefault();
+        const submenu = link.dataset.submenu;
+        mobileMenu.querySelectorAll('ul[data-level]').forEach(ul => ul.style.display = "none");
+        const target = mobileMenu.querySelector(`ul[data-level="${submenu}"]`);
+        if (target) {
+          target.style.display = "block";
+          if (backBtn) backBtn.style.visibility = "visible";
+        }
+      });
+    });
   }
-}
+});
 
 // ====== Функція задіювання чекбоксів ======
 document.addEventListener("DOMContentLoaded", () => {
