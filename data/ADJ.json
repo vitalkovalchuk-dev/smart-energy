@@ -1,0 +1,31 @@
+[
+  {
+    "time": "2025-09-10T00:15:31.112Z",
+    "line1_status_adj": true,
+    "line2_status_adj": false,
+    "line1_status_reg": true,
+    "line2_status_reg": false,
+    "line1_status_leak": true,
+    "line2_status_leak": false,
+    "line1_in": 0.9,
+    "line1_filter_in": 0.9,
+    "line1_filter_out": 0.89,
+    "line1_out": 220,
+    "line2_in": 0,
+    "line2_filter_in": 0,
+    "line2_filter_out": 0,
+    "line2_out": 0,
+    "line1_out_reg": 220,
+    "line1_out_zzk": 250,
+    "line1_out_zsk": 229,
+    "line2_out_reg": 0,
+    "line2_out_zzk": 0,
+    "line2_out_zsk": 0,
+    "line1_leak1": 2,
+    "line1_leak2": 3,
+    "line1_leak3": 0,
+    "line2_leak1": 0,
+    "line2_leak2": 0,
+    "line2_leak3": 0
+  }
+]

@@ -1,1 +1,37 @@
-[]
+[
+  {
+    "line1_status": true,
+    "line1_in": "0.2",
+    "line1_filter_in_pressure": "0.2",
+    "line1_filter_out": "0.2",
+    "line1_out": "209",
+    "line2_status": false,
+    "line2_in": "",
+    "line2_filter_in_pressure": "",
+    "line2_filter_out": "",
+    "line2_out": "",
+    "line1_check_valves": true,
+    "line1_grease": true,
+    "line1_packing": true,
+    "line1_check_regulator": true,
+    "line1_membrane": true,
+    "line1_check_zzk_zsk": true,
+    "line1_clean_filter": false,
+    "line2_check_valves": false,
+    "line2_grease": false,
+    "line2_packing": false,
+    "line2_check_regulator": false,
+    "line2_membrane": false,
+    "line2_check_zzk_zsk": false,
+    "line2_clean_filter": false,
+    "line1_leak_status": true,
+    "line1_leak3": "",
+    "line1_leak2": "1",
+    "line1_leak1": "1",
+    "line2_leak_status": false,
+    "line2_leak3": "",
+    "line2_leak2": "",
+    "line2_leak1": "",
+    "time": "2025-09-10T00:43:52.789Z"
+  }
+]

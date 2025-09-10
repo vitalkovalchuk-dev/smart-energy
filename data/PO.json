@@ -1,0 +1,23 @@
+[
+  {
+    "time": "2025-09-10T00:42:32.662Z",
+    "line1_status": true,
+    "line2_status": false,
+    "line1_leak_status": true,
+    "line2_leak_status": false,
+    "line1_in": 0.6,
+    "line1_filter_in": 0.6,
+    "line1_filter_out": 0.59,
+    "line1_out": 225,
+    "line2_in": 0,
+    "line2_filter_in": 0,
+    "line2_filter_out": 0,
+    "line2_out": 0,
+    "line1_leak1": 3,
+    "line1_leak2": 2,
+    "line1_leak3": 0,
+    "line2_leak1": 0,
+    "line2_leak2": 0,
+    "line2_leak3": 0
+  }
+]

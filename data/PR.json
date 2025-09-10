@@ -1,0 +1,33 @@
+[
+  {
+    "time": "2025-09-10T00:44:28.989Z",
+    "line1_status": true,
+    "line2_status": false,
+    "line1_in": "0.9",
+    "line1_filter_in": "0.9",
+    "line1_filter_out": "0.85",
+    "line1_out": "240",
+    "line2_in": "",
+    "line2_filter_in": "",
+    "line2_filter_out": "",
+    "line2_out": "",
+    "line1_clean_filter": true,
+    "line1_regulator": true,
+    "line1_zzk": false,
+    "line1_zsk": true,
+    "line1_vp": false,
+    "line2_clean_filter": false,
+    "line2_regulator": false,
+    "line2_zzk": false,
+    "line2_zsk": false,
+    "line2_vp": false,
+    "line1_leak_status": true,
+    "line1_leak3": "1",
+    "line1_leak2": "",
+    "line1_leak1": "0",
+    "line2_leak_status": false,
+    "line2_leak3": "",
+    "line2_leak2": "",
+    "line2_leak1": ""
+  }
+]
