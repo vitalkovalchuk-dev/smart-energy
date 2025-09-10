@@ -2,76 +2,103 @@
 <html lang="uk">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Електронний журнал</title>
   <link rel="stylesheet" href="css/style.css">
-  <script src="js/js_script.js" defer></script>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 6px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th {
+      background: #f2f2f2;
+    }
+    .nowrap {
+      white-space: nowrap;
+    }
+  </style>
 </head>
 <body>
-  <main>
-    <h2>Електронний журнал</h2>
-
-    <form id="journalForm">
-      <fieldset>
-        <legend>Фільтрувати записи</legend>
-
-        <label>Тип процедури:
-          <select id="journal_type">
-            <option value="PO">Технічний огляд</option>
-            <option value="TO">Технічне обслуговування</option>
-            <option value="PR">Плановий ремонт</option>
-            <option value="ADJ">Регулювання</option>
-            <option value="VK">Відомчий контроль</option>
-          </select>
-        </label>
-      </fieldset>
-
-    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
-  </main>
+  <h2>Електронний журнал</h2>
+  <table id="journalTable">
+    <thead>
+      <tr>
+        <th class="nowrap">Дата/час</th>
+        <th>Користувач</th>
+        <th>Локація</th>
+        <th>Тип процедури</th>
+        <th>Дані</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // Активність полів через чекбокс
-      const activeCheckbox = document.getElementById("journal_active");
-      const inputs = document.querySelectorAll("#journalForm input[type=text]");
-      activeCheckbox.addEventListener("change", () => {
-        inputs.forEach(inp => inp.disabled = !activeCheckbox.checked);
-      });
-      activeCheckbox.dispatchEvent(new Event("change"));
+    // Словник для зрозумілих назв
+    const labels = {
+      line1_status_adj: "Стан лінії 1 (регулювання)",
+      line2_status_adj: "Стан лінії 2 (регулювання)",
+      line1_status_reg: "Стан лінії 1 (регулятор)",
+      line2_status_reg: "Стан лінії 2 (регулятор)",
+      line1_status_leak: "Стан лінії 1 (витоки)",
+      line2_status_leak: "Стан лінії 2 (витоки)",
+      line1_in: "Вхідна лінія 1 (МПа)",
+      line1_filter_in: "Фільтр вхідний 1 (МПа)",
+      line1_filter_out: "Фільтр вихідний 1 (МПа)",
+      line1_out: "Вихідна лінія 1 (мм.вод.ст)",
+      line2_in: "Вхідна лінія 2 (МПа)",
+      line2_filter_in: "Фільтр вхідний 2 (МПа)",
+      line2_filter_out: "Фільтр вихідний 2 (МПа)",
+      line2_out: "Вихідна лінія 2 (мм.вод.ст)",
+      line1_out_reg: "Регулятор вихідної лінії 1 (мм.вод.ст)",
+      line1_out_zzk: "ЗЗК вихідної лінії 1 (мм.вод.ст)",
+      line1_out_zsk: "ЗСК вихідної лінії 1 (мм.вод.ст)",
+      line2_out_reg: "Регулятор вихідної лінії 2 (мм.вод.ст)",
+      line2_out_zzk: "ЗЗК вихідної лінії 2 (мм.вод.ст)",
+      line2_out_zsk: "ЗСК вихідної лінії 2 (мм.вод.ст)",
+      line1_leak1: "Витік низького тиску (лінія 1, шт)",
+      line1_leak2: "Витік середнього тиску (лінія 1, шт)",
+      line1_leak3: "Витік високого тиску (лінія 1, шт)",
+      line2_leak1: "Витік низького тиску (лінія 2, шт)",
+      line2_leak2: "Витік середнього тиску (лінія 2, шт)",
+      line2_leak3: "Витік високого тиску (лінія 2, шт)"
+    };
 
-      // Відправка даних у JOURNAL.json
-      const form = document.getElementById("journalForm");
-      form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const data = {};
-        form.querySelectorAll("input, select").forEach(inp => {
-          data[inp.id] = inp.type === "checkbox" ? inp.checked : inp.value;
+    // Формування даних у зрозумілий текст
+    function renderParams(entry) {
+      return Object.keys(entry)
+        .filter(k => labels[k])
+        .map(k => `${labels[k]}: ${entry[k]}`)
+        .join("; ");
+    }
+
+    // Завантаження JSON і побудова таблиці
+    fetch("journal.json")
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#journalTable tbody");
+        data.forEach(entry => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="nowrap">${new Date(entry.time).toLocaleString("uk-UA")}</td>
+            <td>${entry.user || "-"}</td>
+            <td>${entry.role || "-"}</td>
+            <td>${entry.geo || "-"}</td>
+            <td>${entry.type || "-"}</td>
+            <td>${renderParams(entry)}</td>
+          `;
+          tbody.appendChild(tr);
         });
-
-        try {
-          const res = await fetch("/save", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              file: "JOURNAL.json",
-              time: new Date().toISOString(),
-              data
-            })
-          });
-          const result = await res.json();
-          if (result.success) {
-            alert("Дані успішно збережено!");
-            form.reset();
-            activeCheckbox.dispatchEvent(new Event("change"));
-          } else {
-            alert("Помилка: " + result.error);
-          }
-        } catch (err) {
-          alert("Не вдалося надіслати дані!");
-          console.error(err);
-        }
+      })
+      .catch(err => {
+        console.error("Помилка завантаження журналу:", err);
       });
-    });
   </script>
 </body>
 </html>
