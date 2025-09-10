@@ -1,0 +1,161 @@
+[
+  {
+    "time": "2025-01-13T09:10:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.95,
+    "line1_pressure_out": 218,
+    "line2_status_ins": false
+  },
+  {
+    "time": "2025-02-12T14:25:00Z",
+    "user": "Павліщук Б.Є.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.91,
+    "line1_pressure_out": 222,
+    "line2_status_ins": true,
+    "line2_pressure_in": 0.93,
+    "line2_pressure_out": 221
+  },
+  {
+    "time": "2025-03-14T07:45:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.88,
+    "line1_pressure_out": 215
+  },
+    {
+    "time": "2025-04-08T12:10:00Z",
+    "user": "Мельник І.Ю.",
+    "role": "Kontrol",
+    "geo": "49.528523, 28.486152",
+    "type": "VK",
+    "action": "Перевірив заповнення журналів, наявність графіків, інструкцій - документація наявна, записи ведуться вчасно. Виявлено витік на фланцевому з’єднанні крана лінії 1 на низькому тиску",
+  },
+  {
+    "time": "2025-04-14T11:30:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.9,
+    "line1_pressure_out": 217,
+    "line2_status_ins": true,
+    "line2_pressure_in": 0.91,
+    "line2_pressure_out": 216
+  },
+    {
+    "time": "2025-04-14T13:30:00Z",
+    "user": "Волинець Ю.І.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "ADJ",
+    "line1_status_adj": true,
+    "line2_status_adj": false,
+    "line1_in": 0.92,
+    "line1_filter_in": 0.91,
+    "line1_filter_out": 0.89,
+    "line1_out": 220,
+    "line1_out_reg": 220,
+    "line1_out_zzk": 250,
+    "line1_out_zsk": 229,
+    "line1_leak1": 2,
+    "line1_leak2": 3,
+    "line1_leak3": 0
+  },
+    {
+    "time": "2025-05-01T18:00:00Z",
+    "user": "Пендюр О.М.",
+    "role": "Kontrol",
+    "geo": "49.528523, 28.486152",
+    "type": "VK",
+    "action": "Перевірив якість регулювання ПРГ. Тиск газу на лінії 1 відповідає режимній карті. Виявлено витік на триходовому крані на вході по лінії 1",
+  },
+  {
+    "time": "2025-05-14T09:00:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": false,
+    "line2_status_ins": true,
+    "line2_pressure_in": 0.92,
+    "line2_pressure_out": 219
+  },
+  {
+    "time": "2025-06-13T16:10:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.89,
+    "line1_pressure_out": 214
+  },
+  {
+    "time": "2025-07-11T10:00:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.87,
+    "line1_pressure_out": 213
+  },
+   {
+    "time": "2025-07-11T15:00:00Z",
+    "user": "Волинець Ю.І.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.9,
+    "line1_pressure_out": 217,
+    "line2_status_ins": true,
+    "line2_pressure_in": 0.91,
+    "line2_pressure_out": 216
+  },
+   {
+    "time": "2025-07-15T15:00:00Z",
+    "user": "Волинець Ю.І.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "TO",
+    "line1_status_to": true,
+    "line1_filter_cleaned": true,
+    "line1_valve_checked": true,
+    "line2_status_to": false
+  },
+    {
+    "time": "2025-07-17T08:15:00Z",
+    "user": "Пендюр О.М.",
+    "role": "Kontrol",
+    "geo": "49.528523, 28.486152",
+    "type": "VK",
+    "action": "Перевірив якість технічного обслуговування ПРГ. Витоків не виявлено, документація наявна, записи ведуться вчасно",
+  },  
+  {
+    "time": "2025-08-11T09:20:00Z",
+    "user": "Василига А.М.",
+    "role": "Team",
+    "geo": "49.528523, 28.486152",
+    "type": "INS",
+    "line1_status_ins": true,
+    "line1_pressure_in": 0.92,
+    "line1_pressure_out": 218
+  },
+
+
+
+
+]
