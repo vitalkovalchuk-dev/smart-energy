@@ -281,14 +281,16 @@ for idx, r in df.iterrows():
 <script src="../../js/script.js" defer></script>
 </head>
 <body>
+
+ # --- Генерація хедера графіків ---
 <div id="site-header"></div>
 <script>
-document.addEventListener("DOMContentLoaded", function(){{
-  fetch("../../header.html").then(r=>r.text()).then(html=>{{
+document.addEventListener("DOMContentLoaded", function(){
+  fetch("/smart-energy/header.html").then(r=>r.text()).then(html=>{
     var c = document.getElementById('site-header');
     if(c) c.innerHTML = html;
-  }}).catch(e=>{{/* header may be missing on local test */}});
-}});
+  }).catch(e=>{/* header may be missing on local test */});
+});
 </script>
 
 <main style="padding:16px;">
@@ -483,3 +485,4 @@ applyFilters();
 Path(LIST_FILE).write_text("".join(html), encoding="utf-8")
 
 print(f"Згенеровано {len(rows)} графіків у '{OUTPUT_DIR}' та 1 каталог '{LIST_FILE}'")
+
