@@ -15,21 +15,46 @@
         });
     });
   </script>
+  <style>
+  .doc-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: #0056b3;
+    font-size: 16px;
+  }
+  .doc-icon {
+    width: 40px;   /* розмір іконки */
+    height: auto;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+</style>
 </head>
 <body>
  
   <main>
     <h2>Виконавчо-технічна документація</h2>
     <p>Оберіть розділ документації:</p>
-    <ul>
-        <li><a href="docs/act_pryim_prg.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (ПРГ)</a></li>
-        <li><a href="docs/act_pryim_st.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (газопровід с/т)</a></li>
-        <li><a href="docs/act_pryim_nt.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (газопровід н/т)</a></li>
-        <li><a href="docs/VTDoc_part1.pdf">Виконавчо-технічна документація, частина 1</a></li>
-        <li><a href="docs/VTDoc_part2.pdf">Виконавчо-технічна документація, частина 2</a></li>
-        <li><a href="docs/passport_GRP.pdf">Паспорт ШГРП</a></li>
-        <li><a href="docs/1_scheme.pdf">Принципова схема ШГРП</a></li>
-     </ul>
+<ul>
+    <li><a href="docs/act_pryim_prg.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (ПРГ)</a></li>
+    <li><a href="docs/act_pryim_st.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (газопровід с/т)</a></li>
+    <li><a href="docs/act_pryim_nt.pdf">Акт приймання в експлуатацію об’єктів систем газопостачання (газопровід н/т)</a></li>
+    
+    <li>
+      <a href="docs/VTDoc_part1.pdf" class="doc-link" target="_blank">
+        Виконавчо-технічна документація, частина 1
+      </a>
+      <img src="img/VTDoc_part1_page-0001.jpg" alt="Іконка документа" class="doc-icon">
+    </li>
+
+    <li><a href="docs/VTDoc_part2.pdf">Виконавчо-технічна документація, частина 2</a></li>
+    <li><a href="docs/passport_GRP.pdf">Паспорт ШГРП</a></li>
+    <li><a href="docs/1_scheme.pdf">Принципова схема ШГРП</a></li>
+</ul>
   </main>
 
 <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
