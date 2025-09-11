@@ -15,6 +15,37 @@
         });
     });
   </script>
+  <style>
+    .doc-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: #0056b3;
+      font-size: 16px;
+    }
+    .doc-icon {
+      width: 40px;   /* розмір іконки */
+      height: auto;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+    .btn-back {
+      margin: 20px 0;
+      padding: 8px 16px;
+      background-color: #0056b3;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .btn-back:hover {
+      background-color: #003f80;
+    }
+  </style>
 </head>
 <body>
 
@@ -23,24 +54,49 @@
     <section>
       <h2>Інструкції</h2>
       <ul>
-      <li><a href='docs/3_instr_OP.pdf'>Інструкція по охороні праці для слюсаря-ремонтника обладнання ГРП і ШГРП</a>
-      <img src="img/3_instr_OP_page-0001.jpg" alt="Іконка" class="doc-icon">
-      <li><a href='docs/4_instr_TO.pdf'>Інструкція профілактичного обслуговування та річної ревізії</a>
-      <img src="img/4_instr_TO_page-0001.jpg" alt="Іконка" class="doc-icon">
-      <li><a href='docs/5_tech_instr_TO.pdf'>Технологічна інструкція при проведенні технічного обслуговування ГРП, ШГРП, ГРУ</a>
-      <li><a href='docs/6_instr_bypass.pdf'>Інструкція по переходу на обвідну лінію (байпас)</a>
-      <li><a href='docs/7_instr_antifire.pdf'>Інструкція по техніці безпеки і протипожежним заходам на ГРП і ШГРП</a>
+        <li>
+          <a href="docs/3_instr_OP.pdf" class="doc-link">
+            Інструкція по охороні праці для слюсаря-ремонтника обладнання ГРП і ШГРП
+          </a>
+          <img src="img/3_instr_OP_page-0001.jpg" alt="Іконка" class="doc-icon">
+        </li>
+        <li>
+          <a href="docs/4_instr_TO.pdf" class="doc-link">
+            Інструкція профілактичного обслуговування та річної ревізії
+          </a>
+          <img src="img/4_instr_TO_page-0001.jpg" alt="Іконка" class="doc-icon">
+        </li>
+        <li>
+          <a href="docs/5_tech_instr_TO.pdf" class="doc-link">
+            Технологічна інструкція при проведенні технічного обслуговування ГРП, ШГРП, ГРУ
+          </a>
+        </li>
+        <li>
+          <a href="docs/6_instr_bypass.pdf" class="doc-link">
+            Інструкція по переходу на обвідну лінію (байпас)
+          </a>
+        </li>
+        <li>
+          <a href="docs/7_instr_antifire.pdf" class="doc-link">
+            Інструкція по техніці безпеки і протипожежним заходам на ГРП і ШГРП
+          </a>
+        </li>
       </ul>
     </section>
+
     <section>
       <h2>Відео</h2>
       <ul>
-        <li><a href="https://www.youtube.com/watch?v=I3wgMx5_fvs" target="_blank">Обхід та обслуговування підземних та надземних газопроводів, споруд</a></li>
+        <li>
+          <a href="https://www.youtube.com/watch?v=I3wgMx5_fvs" target="_blank">
+            Обхід та обслуговування підземних та надземних газопроводів, споруд
+          </a>
+        </li>
       </ul>
     </section>
   </main>
   
- <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
+  <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
 
   <script>
     function goBackOneLevel() {
@@ -53,7 +109,7 @@
         window.location.href = "/";
       }
     }
-    </script>
+  </script>
 
 </body>
 </html>
