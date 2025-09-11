@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Робочий проект ПРГ</title>
     <link rel='stylesheet' href='css/style.css'>
+    <style>
+      ul li {
+        margin: 10px 0;
+      }
+      .doc-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        color: #0056b3;
+        font-size: 16px;
+      }
+      .doc-icon {
+        width: 40px;
+        height: auto;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+    </style>
     <script>
       document.addEventListener("DOMContentLoaded", function () {
         fetch("header.html")
@@ -16,16 +35,27 @@
     </script>
   </head>
   <body>
-    <body>
-   
     <h2>Робочий проект ПРГ</h2>
     <ul>
-        <li><a href="docs/proect_tom1_pz.pdf">Робочий проект. Том 1 (Пояснювальна записка)</a></li>
-        <li><a href="docs/proect_tom1_addon.pdf">Робочий проект. Том 1 (Додатки)</a></li>
-        <li><a href="docs/proect_tom3.pdf">Робочий проект. Том 3 (Газопостачання зовнішнє)</a></li>
-       
-<button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
-
+        <li>
+          <a href="docs/proect_tom1_pz.pdf" class="doc-link" target="_blank">
+            Робочий проект. Том 1 (Пояснювальна записка)
+          </a>
+        </li>
+        <li>
+          <a href="docs/proect_tom1_addon.pdf" class="doc-link" target="_blank">
+            Робочий проект. Том 1 (Додатки)
+          </a>
+        </li>
+        <li>
+          <a href="docs/proect_tom3.pdf" class="doc-link" target="_blank">
+            Робочий проект. Том 3 (Газопостачання зовнішнє)
+          </a>
+          <img src="img/proect_tom3_page-0001.jpg" alt="Іконка проекту" class="doc-icon">
+        </li>
+    </ul>
+    
+    <button class="btn-back" onclick="window.history.back()">⬅ Повернутись</button>
 
     <script>
       function goBackOneLevel() {
@@ -38,6 +68,6 @@
           window.location.href = "/";
         }
       }
-      </script>
-
-</body>
+    </script>
+  </body>
+</html>
